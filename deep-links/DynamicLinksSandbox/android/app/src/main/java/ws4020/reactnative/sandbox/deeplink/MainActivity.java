@@ -1,4 +1,4 @@
-package com.dynamiclinkssandbox;
+package ws4020.reactnative.sandbox.deeplink;
 
 import android.os.Bundle;
 

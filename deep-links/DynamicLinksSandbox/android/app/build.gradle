@@ -132,7 +132,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.dynamiclinkssandbox"
+        applicationId "ws4020.reactnative.sandbox.deeplink"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
