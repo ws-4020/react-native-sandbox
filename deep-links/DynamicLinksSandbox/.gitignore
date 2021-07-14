@@ -58,3 +58,7 @@ junit.xml
 
 # Local environmental variables
 ios/PersonalAccount.xcconfig
+
+# Firebase Setting
+GoogleService-Info.plist
+google-service.json
