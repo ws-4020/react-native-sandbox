@@ -6,7 +6,7 @@ import {Button, Text, ThemeContext} from 'react-native-elements';
 export const Home: React.FC = () => {
   const navigation = useNavigation();
   const {theme} = useContext(ThemeContext);
-  const onGoToInstructionButtonPress = useCallback(() => navigation.navigate('Instructions'), [navigation]);
+  const onGoToInstructionButtonPress = useCallback(() => navigation.navigate('DeepLink'), [navigation]);
   return (
     <View style={StyleSheet.flatten([styles.container, {backgroundColor: theme.colors?.primary}])}>
       <Text h1 style={styles.textColor}>
