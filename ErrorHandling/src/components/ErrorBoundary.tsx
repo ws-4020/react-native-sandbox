@@ -22,6 +22,7 @@ class ErrorBoundary extends React.Component<React.PropsWithChildren<any>, State>
   }
 
   render() {
+    // TODO useEffectなどで実施している同期処理でエラーになった場合もError Boundaryで捕捉できてしまうので、React Componentの再構築で良いのか要検討
     if (this.state.hasError) {
       return (
         <View>
