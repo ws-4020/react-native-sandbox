@@ -11,18 +11,37 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#4D090909"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="20dp">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/shape_rectangle_radius_circular"
             android:gravity="center"
-            android:padding="10dp"
-            android:text="@string/system_error_message"
-            android:textColor="#6E6E6E"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/system_error_title"
+                android:textColor="#6E6E6E"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="3dp"
+                android:text="@string/system_error_message"
+                android:textColor="#6E6E6E"
+                android:textSize="16sp"
+                android:textStyle="normal" />
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>
