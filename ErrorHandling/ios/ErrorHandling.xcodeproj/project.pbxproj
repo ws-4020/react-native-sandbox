@@ -12,6 +12,8 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
+		6932CA9D269FFBBA000816F3 /* RCTExceptionHandlerModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 6932CA9C269FFBBA000816F3 /* RCTExceptionHandlerModule.m */; };
+		6932CAA026A01D14000816F3 /* RCTThrowErrorModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 6932CA9F26A01D14000816F3 /* RCTThrowErrorModule.m */; };
 		96905EF65AED1B983A6B3ABC /* libPods-ErrorHandling.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58EEBF8E8E6FB1BC6CAF49B5 /* libPods-ErrorHandling.a */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 /* End PBXBuildFile section */
@@ -27,6 +29,10 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ErrorHandling/main.m; sourceTree = "<group>"; };
 		2CBE99D8413DC464B14E20E6 /* Pods-ErrorHandling.debugadvanced.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ErrorHandling.debugadvanced.xcconfig"; path = "Target Support Files/Pods-ErrorHandling/Pods-ErrorHandling.debugadvanced.xcconfig"; sourceTree = "<group>"; };
 		58EEBF8E8E6FB1BC6CAF49B5 /* libPods-ErrorHandling.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ErrorHandling.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6932CA9B269FFA5C000816F3 /* RCTExceptionHandlerModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTExceptionHandlerModule.h; sourceTree = "<group>"; };
+		6932CA9C269FFBBA000816F3 /* RCTExceptionHandlerModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTExceptionHandlerModule.m; sourceTree = "<group>"; };
+		6932CA9E26A01CF5000816F3 /* RCTThrowErrorModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTThrowErrorModule.h; sourceTree = "<group>"; };
+		6932CA9F26A01D14000816F3 /* RCTThrowErrorModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTThrowErrorModule.m; sourceTree = "<group>"; };
 		6C2E3173556A471DD304B334 /* Pods-ErrorHandling.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ErrorHandling.debug.xcconfig"; path = "Target Support Files/Pods-ErrorHandling/Pods-ErrorHandling.debug.xcconfig"; sourceTree = "<group>"; };
 		7A4D352CD337FB3A3BF06240 /* Pods-ErrorHandling.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ErrorHandling.release.xcconfig"; path = "Target Support Files/Pods-ErrorHandling/Pods-ErrorHandling.release.xcconfig"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = ErrorHandling/SplashScreen.storyboard; sourceTree = "<group>"; };
@@ -61,6 +67,10 @@
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
+				6932CA9B269FFA5C000816F3 /* RCTExceptionHandlerModule.h */,
+				6932CA9C269FFBBA000816F3 /* RCTExceptionHandlerModule.m */,
+				6932CA9E26A01CF5000816F3 /* RCTThrowErrorModule.h */,
+				6932CA9F26A01D14000816F3 /* RCTThrowErrorModule.m */,
 			);
 			name = ErrorHandling;
 			sourceTree = "<group>";
@@ -293,7 +303,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				6932CAA026A01D14000816F3 /* RCTThrowErrorModule.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				6932CA9D269FFBBA000816F3 /* RCTExceptionHandlerModule.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
