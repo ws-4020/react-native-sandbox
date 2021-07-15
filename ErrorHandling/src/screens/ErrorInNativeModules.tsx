@@ -5,12 +5,12 @@ import {Button} from 'react-native-elements';
 const {ThrowErrorModule} = NativeModules;
 const ScreenName = 'ErrorInNativeModules';
 const Screen = () => {
-  const throwErrorInSyncProcess = useCallback(() => {
-    ThrowErrorModule.throwErrorSyncProcess();
+  const throwErrorInSyncProcess = useCallback(async () => {
+    await ThrowErrorModule.throwErrorSyncProcess();
   }, []);
 
-  const throwErrorInAsyncProcess = useCallback(() => {
-    ThrowErrorModule.throwErrorAsyncProcess();
+  const throwErrorInAsyncProcess = useCallback(async () => {
+    await ThrowErrorModule.throwErrorAsyncProcess();
   }, []);
 
   return (
