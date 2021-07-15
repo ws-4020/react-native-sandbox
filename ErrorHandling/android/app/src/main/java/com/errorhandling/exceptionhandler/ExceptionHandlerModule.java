@@ -19,7 +19,7 @@ public class ExceptionHandlerModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void handle() {
+    public void setUncaughtExceptionHandler() {
         // 現在設定されている UncaughtExceptionHandlerを退避
         final Thread.UncaughtExceptionHandler originalUncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {

@@ -22,7 +22,7 @@ if (Platform.OS !== 'web') {
     console.log('Reload app.');
   });
 }
-ExceptionHandlerModule.handle();
+ExceptionHandlerModule.setUncaughtExceptionHandler();
 
 export const App = () => {
   return (
