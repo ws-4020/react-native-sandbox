@@ -4,6 +4,7 @@ import {StyleSheet, View} from 'react-native';
 import {Button} from 'react-native-elements';
 
 import {ErrorInEventHandler} from './ErrorInEventHandler';
+import {ErrorInNativeModule} from './ErrorInNativeModules';
 import {ErrorInReactComponent} from './ErrorInReactComponent';
 import {ErrorInUseEffectAsyncProcess} from './ErrorInUseEffectAsyncProcess';
 import {ErrorInUseEffectSyncProcess} from './ErrorInUseEffectSyncProcess';
@@ -23,6 +24,7 @@ const Screen = () => {
         title="useEffect内の非同期処理でエラー"
       />
       <Button onPress={() => navigation.navigate(ErrorInReactComponent.ScreenName)} title="ReactComponentでエラー" />
+      <Button onPress={() => navigation.navigate(ErrorInNativeModule.ScreenName)} title="Native Modulesでエラー" />
     </View>
   );
 };

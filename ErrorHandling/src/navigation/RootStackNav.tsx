@@ -1,7 +1,13 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
 
-import {ErrorCase, ErrorInEventHandler, ErrorInReactComponent, ErrorInUseEffectSyncProcess} from '../screens';
+import {
+  ErrorCase,
+  ErrorInEventHandler,
+  ErrorInNativeModule,
+  ErrorInReactComponent,
+  ErrorInUseEffectSyncProcess,
+} from '../screens';
 import {ErrorInUseEffectAsyncProcess} from '../screens/ErrorInUseEffectAsyncProcess';
 
 const nav = createStackNavigator();
@@ -13,6 +19,7 @@ export const RootStackNav: React.FC = () => {
       <nav.Screen name={ErrorInUseEffectSyncProcess.ScreenName} component={ErrorInUseEffectSyncProcess.Screen} />
       <nav.Screen name={ErrorInUseEffectAsyncProcess.ScreenName} component={ErrorInUseEffectAsyncProcess.Screen} />
       <nav.Screen name={ErrorInReactComponent.ScreenName} component={ErrorInReactComponent.Screen} />
+      <nav.Screen name={ErrorInNativeModule.ScreenName} component={ErrorInNativeModule.Screen} />
     </nav.Navigator>
   );
 };
