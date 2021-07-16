@@ -62,4 +62,4 @@ ios/PersonalAccount.xcconfig
 # Firebase Setting
 GoogleService-Info.plist
 google-services.json
-
+android/app/active_debug.keystore

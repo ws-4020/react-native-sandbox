@@ -12,5 +12,3 @@ Android向けとiOS向けにGoogleServiceの設定ファイルを配置します
     - Applicationの登録
     - Android -> package name, keystoreのFinger Print
     - iOS     -> bundleId, App Store ID + TeamID
-
-
