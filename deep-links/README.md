@@ -43,3 +43,15 @@ iOSのライセンスは2パターン。両方利用するとBundleIdかわる�
 なのでデバイスの登録が必要。
 
 bundleId毎にURLを作成すればいける？
+
+## 個人の開発でディープリンクを利用する
+
+Dynamic Linksを利用してしまうとAppStoreへの登録をしてFirebase Applicationと紐付けないと`apple-app-site-association`が作成されない。
+
+これをマニュアルで作成できないとApplicationとApplinksの検証ができない。（URLのホスト側からアプリケーションを信頼できない。）
+
+Androidは配布用証明書のキーのフィンガープリント取らないと`/.well-known/applinks.json`に登録されない？
+
+アプリに[debugの用のkeystore](https://developers.google.com/android/guides/client-auth#using_keytool)からFingerPrintとれば登録される。
+
+アプリ認証用のSHA-1とAndroid App Links用のSHA-256を取得して登録する。
