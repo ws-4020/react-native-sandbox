@@ -18,8 +18,9 @@
 これと、アップロード用鍵で作成した証明書の療法が利用できることを確認する。
 
 ```
-debug.store  -> sha256 --> http://application/assetlinks.json
-upload.store -> sha256 /
+debug.store  -> sha256 -+-> http://application/assetlinks.json
+test.store   -> sha256 -|
+upload.store -> sha256 _|
 ```
 
 ## iOSとライセンス
