@@ -1,5 +1,31 @@
 # ディープリンク
 
+## 開発時に必要なリソース
+
+### Android
+
+ドメインとassetlinks.jsonが必要。
+
+assetlinks.jsonには`SHA-256`のフィンガープリントが必要なので開発やテストで利用するkeystoreの管理も必要。
+たとえば開発時の`debug.keystore`をRepositoryにpushする場合はRepositoryにある`keystore`をもとに署名した`assetlinks.json`でよい。
+
+keystoreを１つにしない場合はディープリンクの検証する分の`keystore`を署名する必要がある。
+
+開発者が自由に署名してしまうと野良アプリケーションに乗っ取られるリスクが有るため、テストや本番運用時には`assetlinks.json`に署名する`keystore`は制限する必要がある。
+
+このとき環境に応じてドメインを複数使って運用する方法もあるが、Manifestファイルに開発用のドメインが含まれてしまうため、リリースのときに削除する運用が必要（になるかもしれないが、ここは調査）。
+
+### iOS
+
+ドメインとの関連付けはADPまたはADEPライセンスが必要である。（個人開発者ライセンスでは利用できない。）
+
+Singinのためにデバイスの登録と開発用証明書、プロビジョニングファイルが必要になる。
+
+### Dynamic Linksの場合
+
+App Store IDが必要になる。（これを設定しないとpage.linkドメインの`apple-app-site-association`に設定されない。）
+
+
 
 ## Android App Links && Universal Links
 
