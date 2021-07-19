@@ -26,7 +26,6 @@ Singinのためにデバイスの登録と開発用証明書、プロビジョ�
 App Store IDが必要になる。（これを設定しないとpage.linkドメインの`apple-app-site-association`に設定されない。）
 
 
-
 ## Android App Links && Universal Links
 
 [Linking](https://reactnative.dev/docs/linking)を利用する。
