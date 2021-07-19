@@ -1,4 +1,4 @@
-package ws4020.reactnative.sandbox.deeplink.generated;
+package ws4020.reactnative.sandbox.generated;
 
 import java.util.Arrays;
 import java.util.List;

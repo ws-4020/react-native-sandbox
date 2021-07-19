@@ -132,7 +132,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "ws4020.reactnative.sandbox.deeplink"
+        applicationId "ws4020.reactnative.sandbox"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

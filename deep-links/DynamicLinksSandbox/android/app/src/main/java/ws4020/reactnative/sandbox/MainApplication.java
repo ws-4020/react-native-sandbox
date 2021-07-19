@@ -1,4 +1,4 @@
-package ws4020.reactnative.sandbox.deeplink;
+package ws4020.reactnative.sandbox;
 
 import android.app.Application;
 import android.content.Context;
@@ -9,7 +9,7 @@ import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
-import ws4020.reactnative.sandbox.deeplink.generated.BasePackageList;
+import ws4020.reactnative.sandbox.generated.BasePackageList;
 
 import org.unimodules.adapters.react.ModuleRegistryAdapter;
 import org.unimodules.adapters.react.ReactModuleRegistryProvider;
