@@ -81,3 +81,33 @@ Androidは配布用証明書のキーのフィンガープリント取らない�
 アプリに[debugの用のkeystore](https://developers.google.com/android/guides/client-auth#using_keytool)からFingerPrintとれば登録される。
 
 アプリ認証用のSHA-1とAndroid App Links用のSHA-256を取得して登録する。
+
+## Dynamicリンクを作成する
+
+Dynamic Linksを作成するには4つのパターンがある。
+
+### Firebase Console上で作成する
+
+Firebase Consoleにアクセスして エンゲージメント > Dynamic Linksから作成する。
+
+### Firebase Dynamic Link Builder APIを利用する
+
+パラメータ調査する。
+
+### REST API
+
+Dynamic Links用のWebAPIキーを使用して、つぎのようなLinkを作成する
+
+ - 長いリンクから短いリンクを作成する
+ - パラメータから短いリンクを作成する
+ - 短いダイナミック リンクの長さを設定する
+
+[パラメータを付与した](https://firebase.google.com/docs/dynamic-links/rest#create_a_short_link_from_parameters)URLを作成する。
+
+### マニュアル
+
+
+- iOSは`https://your_subdomain.page.link/?link=your_deep_link&ibi=bundleId&ifl=appLandingPageUrl`となる。
+- Androidは`https://your_subdomain.page.link/?link=your_deep_link&apn=package_name`となる。
+
+詳細なパラメータは[手動で作成する](https://firebase.google.com/docs/dynamic-links/create-manually)を参照。

@@ -1,11 +1,14 @@
 import {NavigationContainer} from '@react-navigation/native';
+import {DeepLinkContextProvider} from 'context';
 import {RootStackNav} from 'navigation';
 import React from 'react';
 
 export const App = () => {
   return (
-    <NavigationContainer>
-      <RootStackNav />
-    </NavigationContainer>
+    <DeepLinkContextProvider>
+      <NavigationContainer>
+        <RootStackNav />
+      </NavigationContainer>
+    </DeepLinkContextProvider>
   );
 };
