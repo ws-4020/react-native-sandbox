@@ -24,15 +24,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import {useDeepLinkContext} from 'context';
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 export const DeepLink: React.FC = () => {
+  const {link} = useDeepLinkContext();
   return (
     <View style={styles.body}>
       <View style={styles.sectionContainer}>
         <Text style={styles.sectionTitle}>Deep Link</Text>
+        {link && <Text style={styles.sectionDescription}>{link.url}</Text>}
       </View>
     </View>
   );
