@@ -13,13 +13,16 @@ RCT_EXPORT_MODULE(ThrowErrorModule);
 
 RCT_EXPORT_METHOD(throwErrorSyncProcess)
 {
-  @throw @"Throw exception in synchronous process.";
+  [NSException raise:@"NativeModulesSyncProcessException" format:@"Throw exception in synchronous process."];
+  // ↓のようなNSException以外のオブジェクトをthrowした場合は、NSSetUncaughtExceptionHandlerで捕捉できない想定
+  // @throw @"Throw exception in synchronous process.";
+  // @throw [NSError errorWithDomain:@"ws4020" code:100 userInfo:nil];
 }
 
 RCT_EXPORT_METHOD(throwErrorAsyncProcess)
 {
   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-    @throw @"Throw exception in asynchronous process.";
+    [NSException raise:@"NativeModulesSyncProcessException" format:@"Throw exception in synchronous process."];
   });
 }
 

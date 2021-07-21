@@ -1,4 +1,4 @@
-package com.errorhandling.exceptionhandler;
+package ws4020.reactnative.sandbox.exceptionhandler;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,6 +7,8 @@ import android.util.Log;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+
+import io.invertase.firebase.crashlytics.ReactNativeFirebaseCrashlyticsNativeHelper;
 
 public class ExceptionHandlerModule extends ReactContextBaseJavaModule {
     ExceptionHandlerModule(ReactApplicationContext context) {
@@ -32,6 +34,10 @@ public class ExceptionHandlerModule extends ReactContextBaseJavaModule {
                 try {
                     if (!crashed) {
                         crashed = true;
+                        // logメソッドで指定したメッセージは、次に送信するFatal or Non Fatalなログに追加される（logメソッドだけを呼んでも、Firebase Crashlyticsには送信されない）
+                        // ReactNativeFirebaseCrashlyticsNativeHelper.log("Caught uncaught exception.");
+                        // Non Fatalなログを送信
+                        // ReactNativeFirebaseCrashlyticsNativeHelper.recordNativeException(throwable);
                         Activity activity = getCurrentActivity();
 
                         Intent i = new Intent();

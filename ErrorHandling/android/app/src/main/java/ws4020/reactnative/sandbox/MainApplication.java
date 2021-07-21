@@ -1,17 +1,17 @@
-package com.errorhandling;
+package ws4020.reactnative.sandbox;
 
 import android.app.Application;
 import android.content.Context;
 
-import com.errorhandling.exceptionhandler.ExceptionHandlerPackage;
-import com.errorhandling.throwerror.ThrowErrorPackage;
+import ws4020.reactnative.sandbox.exceptionhandler.ExceptionHandlerPackage;
+import ws4020.reactnative.sandbox.throwerror.ThrowErrorPackage;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
-import com.errorhandling.generated.BasePackageList;
+import ws4020.reactnative.sandbox.generated.BasePackageList;
 
 import org.unimodules.adapters.react.ModuleRegistryAdapter;
 import org.unimodules.adapters.react.ReactModuleRegistryProvider;
@@ -98,7 +98,7 @@ public class MainApplication extends Application implements ReactApplication {
          We use reflection here to pick up the class that initializes Flipper,
         since Flipper library is not available in release mode
         */
-        Class<?> aClass = Class.forName("com.errorhandling.ReactNativeFlipper");
+        Class<?> aClass = Class.forName("ws4020.reactnative.sandbox.ReactNativeFlipper");
         aClass
             .getMethod("initializeFlipper", Context.class, ReactInstanceManager.class)
             .invoke(null, context, reactInstanceManager);

@@ -1,4 +1,4 @@
-package com.errorhandling.generated;
+package ws4020.reactnative.sandbox.generated;
 
 import java.util.Arrays;
 import java.util.List;

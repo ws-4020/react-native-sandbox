@@ -1,4 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.errorhandling">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="ws4020.reactnative.sandbox">
 
   <uses-permission android:name="android.permission.INTERNET"/>
 

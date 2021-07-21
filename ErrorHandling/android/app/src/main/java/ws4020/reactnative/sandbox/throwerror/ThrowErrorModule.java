@@ -1,4 +1,4 @@
-package com.errorhandling.throwerror;
+package ws4020.reactnative.sandbox.throwerror;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;

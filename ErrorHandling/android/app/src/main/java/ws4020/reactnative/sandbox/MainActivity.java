@@ -1,4 +1,4 @@
-package com.errorhandling;
+package ws4020.reactnative.sandbox;
 
 import android.os.Bundle;
 

@@ -6,6 +6,7 @@
 // RCTExceptionHandlerModule.m
 #import "RCTExceptionHandlerModule.h"
 #import <React/RCTLog.h>
+#import "RNFBCrashlyticsNativeHelper.h"
 
 // CONSTANTS
 NSString * const RNUncaughtExceptionHandlerSignalExceptionName = @"RNUncaughtExceptionHandlerSignalExceptionName";
@@ -54,14 +55,16 @@ RCT_EXPORT_METHOD(setUncaughtExceptionHandler)
 {
   previousNativeErrorCallbackBlock = NSGetUncaughtExceptionHandler();
   
+  // NSExceptionのみ捕捉できる
   NSSetUncaughtExceptionHandler(&HandleException);
+  // NSException以外のエラーは、シグナルハンドラでハンドリング
   signal(SIGABRT, SignalHandler);
   signal(SIGILL, SignalHandler);
   signal(SIGSEGV, SignalHandler);
   signal(SIGFPE, SignalHandler);
   signal(SIGBUS, SignalHandler);
-  //signal(SIGPIPE, SignalHandler);
   //Removing SIGPIPE as per https://github.com/master-atul/react-native-exception-handler/issues/32
+  //signal(SIGPIPE, SignalHandler);
   NSLog(@"Registerd exception handler.");
 }
 
@@ -72,6 +75,12 @@ RCT_EXPORT_METHOD(setUncaughtExceptionHandler)
 
 - (void)handleException:(NSException *)exception
 {
+    NSMutableDictionary * info = [NSMutableDictionary dictionary];
+    [info setValue:exception forKey:@"Exception"];
+
+    NSError *error = [[NSError alloc] initWithDomain:@"ws4020" code:0 userInfo:info];
+    [RNFBCrashlyticsNativeHelper recordNativeError:error];
+  
     NSString * readeableError = [NSString stringWithFormat:NSLocalizedString(@"%@\n%@", nil),
                                  [exception reason],
                                  [[exception userInfo] objectForKey:RNUncaughtExceptionHandlerAddressesKey]];
