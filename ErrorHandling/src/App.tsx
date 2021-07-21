@@ -25,9 +25,8 @@ const {ExceptionHandlerModule} = NativeModules;
 // ExceptionHandlerModule.setUncaughtExceptionHandler();
 
 // Firebase Crashlyticsの初期化
-crashlytics();
-
 crashlytics().setUserId('testUser');
+
 // TODO 初期処理でユーザIDを設定
 
 export const App = () => {
