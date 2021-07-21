@@ -1,67 +1,128 @@
 # ErrorHandling
 
-## React Native開発環境の構築
+React Nativeを使用したアプリのエラーハンドリングについて検証するプロジェクトです。
 
-- [Setting up the development environment - React Native](https://reactnative.dev/docs/environment-setup)を参考に開発環境を構築してください。
-  - **必ず「React Native CLI Quickstart」というタブをクリック**して、手順を実施してください。
-  - インストールするNode.jsのバージョンはLTSバージョンとしてください。
-    - WindowsでChocolateyでインストールする場合は、 `node-lts` パッケージをおすすめします。
-  - 「Development OS」は、開発に利用している OS を選択してください。
-  - （macOSのみ）「Target OS」は、「iOS」「Android」の両方の手順を実施してください。
+以下のケースにおいて、捕捉されていないエラーをハンドリングして、Firebase Crashlyticsにエラーログを送信できるかを検証しています。
 
-## 依存パッケージのインストール
+* React Componentで発生したエラー
+* ロジック（useEffectなど）内で発生したエラー
+  * 同期処理
+  * 非同期処理
+* イベントハンドラ
+  * 同期処理
+  * 非同期処理
+* Native Modules
+  * 同期処理
+  * 非同期処理
+  
+グローバルにエラーを捕捉する方法としては、以下のような方法があります。
 
-リポジトリをクローンした直後や`package-lock.json`が更新された場合は、依存パッケージをインストールする必要があります。
+| 方法 | 捕捉できるエラー |
+|:----|:----|
+| Error Boundary | ・React Componentで発生したエラー<br>・ロジック（useEffectなど）内で発生したエラー |
+| ErrorUtils | ・React Componentで発生したエラー<br>・ロジック（useEffectなど）内で発生した同期処理のエラー<br>イベントハンドラで発生した同期処理のエラー |
+| ErrorUtils | ・React Componentで発生したエラー<br>・ロジック（useEffectなど）内で発生した同期処理のエラー<br>イベントハンドラで発生した同期処理のエラー |
+| Thread.setDefaultUncaughtExceptionHandler（Androidのみ） | Native Modules内で発生したエラー |
+| NSSetUncaughtExceptionHandler（iOSのみ） | Native Modules内でNSExceptionがthrowされた場合 |
+| signal（iOSのみ） | シグナルを受け取った場合 |
 
-次のコマンドを実行して、依存パッケージをインストールしてください。
+上記方法で、エラーを捕捉できることを検証していますが、 現在コミットしているソースコードでは、独自でグローバルなエラーハンドリングを実施せず、全てFirebase Crashlytics側で処理する方法としています。
+※ 上記方法の動作を確認したい場合は、必要に応じて該当箇所のコメントアウトを解除してください。
+    
+## アプリの実行
 
-1. `npm ci`
-2. （macOSのみ）`npx pod-install`
+【Android】
+```bash
+npm run android -- --variant Release
+```
 
-## アプリを起動する
+【iOS】
+```bash
+npm run ios -- --configuration Release
+```
 
-次のコマンドを実行して、Androidエミュレータ、iOSシミュレータでアプリを起動します。
+実行後に表示されるページで、エラーを発生させるとアプリがクラッシュしてエラーログがFirebase Crashlyticsに送信されます。
+Firebase Crashlyticsにログが送信されるタイミングは、アプリがクラッシュした後に、再度アプリを起動した時になります。
 
-- Android: `npm run android`
-- iOS: `npm run ios`
+なお、ReleaseモードではなくDebugモードでもアプリは動作しますが、Debugモードではエラー時にReact NativeがLogBoxにエラーログを表示する影響で、Firebase Crashlyticsにはログが送信されません。
 
-## アプリをビルドしてiOSデバイスにインストールする
+## Firebase Crashlyticsのコンソールに表示されているスタックトレースとソースマップのマッピング
 
-1. `ios-deploy --version`を実行して、インストール済みの`ios-deploy`のバージョンが表示されることを確認してください。
-   * エラーになった場合は、[ios-deploy](https://github.com/ios-control/ios-deploy)をインストールしてください。
-2. `ios/PersonalAccount.xcconfig.template` を `ios/PersonalAccount.xcconfig` としてコピーしてください。
-3. ファイルに記載されている設定値を、それぞれ次のように設定してください。
-   * `CODE_SIGN_STYLE`: Automatic
-   * `PERSONAL_IDENTIFIER`: 他の人とかぶらない、何らかの一意の値
-   * `DEVELOPMENT_TEAM`: 個人のApple IDに割り当てられたID
-     * わからない場合は、[個人のApple IDでのチームIDの確認方法](#個人のapple-idでのチームidの確認方法)の手順で確認してください。
-4. ルートディレクトリで`xed ios`と実行して、Xcodeでプロジェクトを開いてください。開くだけで良いようです。
-5. ルートディレクトリで次のコマンドを実行してください。`<device name>`はインストール先のiOSデバイス名です。
-   * `npm run ios -- --device='<device name>'`
-   * デバイス名、シミュレータ名の一覧は `xcrun xctrace list devices` で取得することができます。
+Firebase Crashlyticsのコンソールに表示されているJavaScriptで発生したエラーは、ソースマップが存在しないためエラー発生箇所が直感的にわからない表示となっています。
 
-> **Note**: Xcodeで一度もプロジェクトを開かずにデバイスにインストールしようとすると、次のようなエラーが発生します。
-> ```
-> error: No profiles for 'personal.org.name.RnSpoiler.<personal>' were found: Xcode couldn't find any iOS App Development provisioning profiles matching 'personal.org.name.RnSpoiler.<personal>'. Automatic signing is disabled and unable to generate a profile. To enable automatic signing, pass -allowProvisioningUpdates to xcodebuild. (in target 'RnSpoiler' from project 'RnSpoiler')
-> ```
-> このようなエラーが発生した場合は、一度Xcodeでプロジェクトを開いてからデバイスへのインストールを試してください。
+```
+Fatal Exception: com.facebook.react.common.JavascriptException: Error: Error has occurred in synchronous process., stack:
+<unknown>@855:884
+<unknown>@677:2461
+value@231:8208
+value@231:7464
+onResponderRelease@231:6218
+p@96:384
+b@96:527
+T@96:581
+w@96:876
+ke@96:12621
+forEach@-1
+_@96:2057
+<unknown>@96:12968
+xe@96:89236
+Se@96:12419
+Re@96:12808
+receiveTouches@96:13600
+value@32:3350
+<unknown>@32:747
+value@32:2610
+value@32:719
+value@-1
+```
 
-### 個人のApple IDでのチームIDの確認方法
+ここでは、Firebase Crashlyticsのコンソールに表示されたJavaScriptのスタックトレースを、ソースマップとマッピングしてエラー発生箇所を特定する手順を記載します。
 
-まず、XcodeからApple IDでログインし、開発用の証明書を作成します。
+まず、以下のコマンドでソースマップを作成します。
+```bash
+npm run bundle
+```
 
-1. Xcodeでアカウントの設定画面を開き、必要ならログインします。
-   * Xcode 12では、「Preferences」＞「Accounts」でアカウントの設定画面を開けます
-   * ログインする場合、左下の「＋」ボタンをクリックしてログインします。
-2. 利用するApple IDを選択状態にし、右側のチーム一覧で「<自分の氏名> (Personal Team)」と書かれているチームを選択します。
-   * Apple Developer Programなどに登録されているユーザの場合、Apple Developer Programのデベロッパー名なども表示されるため、複数のチームが表示されます。
-3. 「Personal Team」を選択した状態で「Manage Certificates」をクリックします。
-4. 「Apple Development Certificates」に証明書がリストされていることを確認します。
-   * 証明書が表示されない場合は、左下の「＋」ボタンを押して証明書を作成してください。
+`[プロジェクトルート]/generated`に、`index.[android/ios].bundle.map`が作成されます。
 
-次に、「キーチェーンアクセス」を開き、開発用の証明書を確認します。
+次に、Firebase Crashlyticsのコンソールに表示されているスタックトレースをコピーして、任意のファイル、ディレクトリに格納します。
+ここでは、`[プロジェクトルート]/stacktrace.txt`に保存する仮定とします。
 
-1. 「キーチェーンアクセス」を開き、左上のキーチェーン一覧から「ログイン」を選択します。
-2. 「分類」の「証明書」を選択し、ログインキーチェーンに保存されている証明書の一覧を表示します。
-3. 「Apple Development: <Apple IDのメールアドレス> (xxxxxxxxxx)」という名前の証明書をダブルクリックし、情報を表示します。
-4. 表示された情報の中の「部署」に設定されている文字列がチームIDです。
+スタックトレースとソースマップをマッピングします。
+
+【Android】
+```bash
+npm run symbolicate:ios -- < stacktrace.txt
+```
+
+【iOS】
+```bash
+npm run symbolicate:ios -- < stacktrace.txt
+```
+
+実行後、以下のようにエラー発生箇所がわかるようになります。
+```
+Fatal Exception: com.facebook.react.common.JavascriptException: Error: Error has occurred in synchronous process., stack:
+~/dev/src/github.com/ws-4020/react-native-sandbox/ErrorHandling/src/screens/ErrorInEventHandler.tsx:8:useCallback$argument_0
+~/dev/src/github.com/ws-4020/react-native-sandbox/ErrorHandling/node_modules/react-native-elements/dist/buttons/Button.js:35:useCallback$argument_0
+~/dev/src/github.com/ws-4020/react-native-sandbox/ErrorHandling/node_modules/react-native/Libraries/Pressability/Pressability.js:691:_performTransitionSideEffects
+~/dev/src/github.com/ws-4020/react-native-sandbox/ErrorHandling/node_modules/react-native/Libraries/Pressability/Pressability.js:628:_receiveSignal
+~/dev/src/github.com/ws-4020/react-native-sandbox/ErrorHandling/node_modules/react-native/Libraries/Pressability/Pressability.js:524:responderEventHandlers.onResponderRelease
+~/dev/src/github.com/ws-4020/react-native-sandbox/ErrorHandling/node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-prod.js:32:invokeGuardedCallbackImpl
+~/dev/src/github.com/ws-4020/react-native-sandbox/ErrorHandling/node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-prod.js:50:invokeGuardedCallback
+~/dev/src/github.com/ws-4020/react-native-sandbox/ErrorHandling/node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-prod.js:63:invokeGuardedCallbackAndCatchFirstError
+~/dev/src/github.com/ws-4020/react-native-sandbox/ErrorHandling/node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-prod.js:82:executeDispatch
+~/dev/src/github.com/ws-4020/react-native-sandbox/ErrorHandling/node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-prod.js:976:executeDispatchesAndReleaseTopLevel
+forEach@-1
+~/dev/src/github.com/ws-4020/react-native-sandbox/ErrorHandling/node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-prod.js:155:forEachAccumulated
+~/dev/src/github.com/ws-4020/react-native-sandbox/ErrorHandling/node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-prod.js:1007:batchedUpdates$argument_0
+~/dev/src/github.com/ws-4020/react-native-sandbox/ErrorHandling/node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-prod.js:7566:batchedUpdatesImpl
+~/dev/src/github.com/ws-4020/react-native-sandbox/ErrorHandling/node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-prod.js:957:batchedUpdates
+~/dev/src/github.com/ws-4020/react-native-sandbox/ErrorHandling/node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-prod.js:988:_receiveRootNodeIDEvent
+~/dev/src/github.com/ws-4020/react-native-sandbox/ErrorHandling/node_modules/react-native/Libraries/Renderer/implementations/ReactNativeRenderer-prod.js:1053:ReactNativePrivateInterface.RCTEventEmitter.register$argument_0.receiveTouches
+~/dev/src/github.com/ws-4020/react-native-sandbox/ErrorHandling/node_modules/react-native/Libraries/BatchedBridge/MessageQueue.js:416:__callFunction
+~/dev/src/github.com/ws-4020/react-native-sandbox/ErrorHandling/node_modules/react-native/Libraries/BatchedBridge/MessageQueue.js:109:__guard$argument_0
+~/dev/src/github.com/ws-4020/react-native-sandbox/ErrorHandling/node_modules/react-native/Libraries/BatchedBridge/MessageQueue.js:364:__guard
+~/dev/src/github.com/ws-4020/react-native-sandbox/ErrorHandling/node_modules/react-native/Libraries/BatchedBridge/MessageQueue.js:108:callFunctionReturnFlushedQueue
+value@-1
+```
