@@ -62,3 +62,6 @@ ios/PersonalAccount.xcconfig
 # Firebase
 GoogleService-Info.plist
 google-services.json
+
+# generated
+/generated

@@ -13,7 +13,12 @@
     "fix:es": "eslint --fix --ext .jsx,.js,.tsx,.ts .",
     "reset-cache": "node .script/runner.js reset-cache",
     "reset-cache:all": "node .script/runner.js reset-cache --all",
-    "reset-cache:interactive": "node .script/runner.js reset-cache --interactive"
+    "reset-cache:interactive": "node .script/runner.js reset-cache --interactive",
+    "bundle": "run-s --print-name --continue-on-error bundle:*",
+    "bundle:android": "mkdirp ./generated && react-native bundle --dev false --sourcemap-output ./generated/index.android.bundle.map --entry-file index.js --bundle-output ./generated/index.android.bundle --platform android",
+    "bundle:ios": "mkdirp ./generated && react-native bundle --dev false --sourcemap-output ./generated/index.ios.bundle.map --entry-file index.js --bundle-output ./generated/index.ios.bundle --platform ios",
+    "symbolicate:android": "npx metro-symbolicate ./generated/index.android.bundle.map",
+    "symbolicate:ios": "npx metro-symbolicate ./generated/index.ios.bundle.map"
   },
   "dependencies": {
     "@react-native-community/masked-view": "0.1.10",
@@ -50,6 +55,7 @@
     "eslint-config-universe": "^7.0.0",
     "jest-expo": "^41.0.0",
     "jest-junit": "^12.0.0",
+    "mkdirp": "^1.0.4",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.2.0",
     "typescript": "~4.0.0"
