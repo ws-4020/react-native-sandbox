@@ -79,7 +79,7 @@ RCT_EXPORT_METHOD(setUncaughtExceptionHandler)
     [info setValue:exception forKey:@"Exception"];
 
     NSError *error = [[NSError alloc] initWithDomain:@"ws4020" code:0 userInfo:info];
-    [RNFBCrashlyticsNativeHelper recordNativeError:error];
+//    [RNFBCrashlyticsNativeHelper recordNativeError:error];
   
     NSString * readeableError = [NSString stringWithFormat:NSLocalizedString(@"%@\n%@", nil),
                                  [exception reason],

@@ -8,10 +8,10 @@ React Nativeを使用したアプリのエラーハンドリングについて�
 * ロジック（useEffectなど）内で発生したエラー
   * 同期処理
   * 非同期処理
-* イベントハンドラ
+* イベントハンドラで発生したエラー
   * 同期処理
   * 非同期処理
-* Native Modules
+* Native Modulesで発生したエラー
   * 同期処理
   * 非同期処理
   
@@ -19,7 +19,7 @@ React Nativeを使用したアプリのエラーハンドリングについて�
 
 | 方法 | 捕捉できるエラー |
 |:----|:----|
-| Error Boundary | ・React Componentで発生したエラー<br>・ロジック（useEffectなど）内で発生したエラー |
+| Error Boundary | ・React Componentで発生したエラー<br>・ロジック（useEffectなど）内で発生した同期処理のエラー |
 | ErrorUtils | ・React Componentで発生したエラー<br>・ロジック（useEffectなど）内で発生した同期処理のエラー<br>イベントハンドラで発生した同期処理のエラー |
 | ErrorUtils | ・React Componentで発生したエラー<br>・ロジック（useEffectなど）内で発生した同期処理のエラー<br>イベントハンドラで発生した同期処理のエラー |
 | Thread.setDefaultUncaughtExceptionHandler（Androidのみ） | Native Modules内で発生したエラー |
@@ -100,7 +100,7 @@ npm run symbolicate:ios -- < stacktrace.txt
 npm run symbolicate:ios -- < stacktrace.txt
 ```
 
-実行後、以下のようにエラー発生箇所がわかるようになります。
+実行後、以下のようなスタックトレースが標準出力され、エラー発生箇所がわかるようになります。
 ```
 Fatal Exception: com.facebook.react.common.JavascriptException: Error: Error has occurred in synchronous process., stack:
 ~/dev/src/github.com/ws-4020/react-native-sandbox/ErrorHandling/src/screens/ErrorInEventHandler.tsx:8:useCallback$argument_0
