@@ -15,8 +15,6 @@ export const DeepLinkContextProvider: React.FC = ({children}) => {
     setDeepLink(link);
   };
   useEffect(() => {
-    // forground
-    const unsubscribe = dynamicLinks().onLink((link) => handleLink(link));
     // When the component is unmounted, remove the listener
     // background
     dynamicLinks()
@@ -29,6 +27,8 @@ export const DeepLinkContextProvider: React.FC = ({children}) => {
       .catch((e) => {
         console.log(e);
       });
+    // forground
+    const unsubscribe = dynamicLinks().onLink((link) => handleLink(link));
     return () => unsubscribe();
   }, []);
 
