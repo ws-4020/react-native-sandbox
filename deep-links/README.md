@@ -82,6 +82,20 @@ Androidは配布用証明書のキーのフィンガープリント取らない�
 
 アプリ認証用のSHA-1とAndroid App Links用のSHA-256を取得して登録する。
 
+## TestFlightで利用する
+
+アプリがインストールされていない場合のURLをTestFlightに向けておけばインストールはできる。
+
+  1. TestFlightをインストール
+  1. TestFlightからアプリをインストール
+  1. URLを取得
+
+ただし取得されるURLがTestFlightのURLになってしまうので、Firebaseに記憶させるURLを工夫すればできるかもしれない。
+
+ 1. アプリがインストールしていないURLを`https://custom.domain/app/?key=value`
+ 1. 該当のWebサイトはTestFlight（もしくはAppStore）にリダイレクト。
+ 1. Appがインストールされれば該当のURLがモバイルアプリで取得できる。
+
 ## Dynamicリンクを作成する
 
 Dynamic Linksを作成するには4つのパターンがある。
