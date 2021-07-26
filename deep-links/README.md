@@ -82,6 +82,11 @@ Androidは配布用証明書のキーのフィンガープリント取らない�
 
 アプリ認証用のSHA-1とAndroid App Links用のSHA-256を取得して登録する。
 
+## インストールのStepを踏んでもURLを利用する
+
+Dynamic Linksの機能としてインストールのStepを踏んでもアプリケーションがURLを取得できるというメリットがある。
+テスト時や開発時のこの検証をする場合、「アプリをインストールしていないときのURL」を未公開時に利用するインストール手順の最初のURLにすることでテストができる。
+
 ## TestFlightで利用する
 
 アプリがインストールされていない場合のURLをTestFlightに向けておけばインストールはできる。
@@ -92,9 +97,20 @@ Androidは配布用証明書のキーのフィンガープリント取らない�
 
 ただし取得されるURLがTestFlightのURLになってしまうので、Firebaseに記憶させるURLを工夫すればできるかもしれない。
 
- 1. アプリがインストールしていないURLを`https://custom.domain/app/?key=value`
- 1. 該当のWebサイトはTestFlight（もしくはAppStore）にリダイレクト。
- 1. Appがインストールされれば該当のURLがモバイルアプリで取得できる。
+ 1. linkを`https://custom.domain/app/?key=value`
+ 1. アプリがインストールしていないURLをTestFlightに設定
+ 1. TestFlight経由でAppがインストールされれば該当のURLがモバイルアプリで取得できる
+
+## Androidで利用する
+
+アプリがインストールされていない場合のURLをBlobStorageやPlayStore(※1)にむければできる。
+
+ 1. linkを`https://custom.domain/app/?key=value`
+ 1. アプリがインストールされていないURLをSASのURLにする
+ 1. APKのインストール手順にしたがい、インストール
+ 1. アプリを起動
+
+※1: 内部テスターなどで検証できる想定だが、現在未検証。
 
 ## Dynamicリンクを作成する
 
@@ -120,8 +136,30 @@ Dynamic Links用のWebAPIキーを使用して、つぎのようなLinkを作成
 
 ### マニュアル
 
-
 - iOSは`https://your_subdomain.page.link/?link=your_deep_link&ibi=bundleId&ifl=appLandingPageUrl`となる。
 - Androidは`https://your_subdomain.page.link/?link=your_deep_link&apn=package_name`となる。
 
 詳細なパラメータは[手動で作成する](https://firebase.google.com/docs/dynamic-links/create-manually)を参照。
+
+## リンクを受け取る
+
+リンクを受け取るときに注意するポイントはつぎの2点
+
+ - ログインなどの処理を挟むときにURLを保存しておく
+ - インストール後に別のDynamic Linkを利用する
+
+### URLの保存
+
+AndroidのガイドではUX的にはディープリンクを利用する場合は直接遷移が望ましい。たとえばECサイトでは商品のURLはログインしなくても見れるようにして、カートにいれるときにログインする。
+
+ただしアプリの特性として、ログインが必要な場合などはURLを保存しておく。（具体的な方法は初期化処理をあわせて考えたい）
+
+### インストール後に別のURLを保存
+
+招待コードを受け取るケースを考えてみる。（※未検証のパターンで問題が起きるかどうか確認していない）
+
+まず1回目の招待コードを利用したURLを未インストールのユーザに送る。ユーザの確認が遅く、有効期限が切れてしまってもユーザはDynamic Linkでアプリをインストールする。招待した側は招待コードを再発行してURLをユーザに送る。
+
+このとき、ユーザは最新のURLをアプリで受け取る必要があるが、古い（1回目）URLを取得する無効なURLを受けとってしまう。
+
+こうならないことを検証する必要がある。

@@ -1,42 +1,61 @@
-/*
- * Original source: https://github.com/react-native-community/react-native-template-typescript/blob/60690d1f7f3c2856d4c7129fd972400452c9510d/template/App.tsx
- *
- * Original License:
- * MIT License
- *
- * Copyright (c) 2019 Emin Khateeb
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
 import {useDeepLinkContext} from 'context';
-import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import Clipboard from 'expo-clipboard';
+import React, {useCallback, useState} from 'react';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Button, Input} from 'react-native-elements';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 export const DeepLink: React.FC = () => {
-  const {link} = useDeepLinkContext();
+  const {link, createLink} = useDeepLinkContext();
+  const [teamName, setTeamName] = useState<string>();
+  const [createdLink, setCreatedLink] = useState<string>();
+  const [copiedMessage, setCopiedMessage] = useState<string>();
+
+  const onChangeTeamName = useCallback(
+    (text: string) => {
+      setTeamName(text);
+    },
+    [setTeamName],
+  );
+
+  const createTeamLink = useCallback(() => {
+    if (teamName) {
+      createLink('team', teamName)
+        .then((link) => {
+          setCreatedLink(link);
+        })
+        .catch((e) => console.log(e));
+    }
+  }, [createLink, setCreatedLink, teamName]);
+
+  const copyToClipBoard = useCallback(() => {
+    if (createdLink) {
+      Clipboard.setString(createdLink);
+      setCopiedMessage('リンクをコピーしました');
+      setTimeout(() => setCopiedMessage(undefined), 1500);
+    }
+  }, [createdLink]);
+
   return (
     <View style={styles.body}>
       <View style={styles.sectionContainer}>
         <Text style={styles.sectionTitle}>Deep Link</Text>
-        {link && <Text style={styles.sectionDescription}>{link.url}</Text>}
+        <Text style={styles.sectionDescription}>{link ? link.url : 'リンクはありません。'}</Text>
       </View>
+      <View style={styles.sectionContainer}>
+        <Text>チーム名を入力してください</Text>
+        <Input onChangeText={onChangeTeamName} />
+        <Button disabled={!teamName} onPress={createTeamLink} title="リンクを作成" />
+      </View>
+      {createdLink && (
+        <View style={styles.sectionContainer}>
+          <Text style={styles.sectionTitle}>生成されたURLです。タッチするとコピーされます。</Text>
+          <TouchableOpacity onPress={copyToClipBoard}>
+            <Text>{createdLink}</Text>
+          </TouchableOpacity>
+          <Text style={styles.sectionDescription}>{copiedMessage}</Text>
+        </View>
+      )}
     </View>
   );
 };
