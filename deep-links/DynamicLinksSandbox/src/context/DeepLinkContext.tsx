@@ -38,7 +38,7 @@ export const DeepLinkContextProvider: React.FC = ({children}) => {
     createLink: async (key, value) => {
       return dynamicLinks().buildShortLink({
         link: `https://sample.domain/app?${key}=${value}`,
-        domainUriPrefix: `https://ws4020reactnativesandbox.page.link/`,
+        domainUriPrefix: `https://ws4020reactnativesandbox.page.link`,
         ios: {
           bundleId: 'ws4020.reactnative.sandbox',
           fallbackUrl: 'https://apps.apple.com/jp/app/testflight/id899247664', // testflight or app store
