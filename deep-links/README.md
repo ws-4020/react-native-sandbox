@@ -61,8 +61,6 @@ GoogleService-Info.plistをDownloadして設定する。
 
 このとき、ユーザは最新のURLをアプリで受け取る必要があるが、古い（1回目）URLを取得する無効なURLを受けとってしまう。
 
-
-
 #### Google Play、App Storeを利用
 
 アプリを公開できていないため、未インストール時にStoreに誘導することは未検証。

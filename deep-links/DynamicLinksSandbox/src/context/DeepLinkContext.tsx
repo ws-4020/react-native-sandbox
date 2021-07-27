@@ -1,5 +1,6 @@
 import dynamicLinks, {FirebaseDynamicLinksTypes} from '@react-native-firebase/dynamic-links';
 import React, {useContext, useEffect, useState} from 'react';
+import {Linking} from 'react-native';
 
 interface ContextValueType {
   link?: FirebaseDynamicLinksTypes.DynamicLink;
@@ -18,10 +19,12 @@ export const DeepLinkContextProvider: React.FC = ({children}) => {
   useEffect(() => {
     // When the component is unmounted, remove the listener
     // background
+    // Linking.addEventListener('verify', (e) => console.log('event listener', e));
     dynamicLinks()
       .getInitialLink()
       .then((link) => {
         if (link) {
+          console.log('initial link', link);
           handleLink(link);
         }
       })
@@ -29,15 +32,20 @@ export const DeepLinkContextProvider: React.FC = ({children}) => {
         console.log(e);
       });
     // forground
-    const unsubscribe = dynamicLinks().onLink((link) => handleLink(link));
+    const unsubscribe = dynamicLinks().onLink((link) => {
+      handleLink(link);
+      console.log('onLink', link);
+    });
     return () => unsubscribe();
   }, []);
 
   const contextValue: ContextValueType = {
     link: deepLink,
     createLink: async (key, value) => {
+      const encodedKey = encodeURI(key);
+      const encodedValue = encodeURI(value);
       return dynamicLinks().buildShortLink({
-        link: `https://sample.domain/app?${key}=${value}`,
+        link: `https://sample.domain/app?${encodedKey}=${encodedValue}`,
         domainUriPrefix: `https://ws4020reactnativesandbox.page.link`,
         ios: {
           bundleId: 'ws4020.reactnative.sandbox',
@@ -47,7 +55,7 @@ export const DeepLinkContextProvider: React.FC = ({children}) => {
           packageName: 'ws4020.reactnative.sandbox',
           // Azure Blob Storage SAS or Play Store
           fallbackUrl:
-            'https://reactnativesandbox.blob.core.windows.net/$web/deeplink/app-release.apk?sp%3Dr%26st%3D2021-07-21T06:08:55Z%26se%3D2021-09-30T14:08:55Z%26spr%3Dhttps%26sv%3D2020-08-04%26sr%3Db%26sig%3DHzBNBurG1AaA55cBaUGD824Xe7MTfYunV%252Fi0YVIOviY%253D',
+            'https://reactnativesandbox.blob.core.windows.net/$web/deeplink/app-release.apk?sp=r&st=2021-07-26T08:29:47Z&se=2021-07-26T16:29:47Z&spr=https&sv=2020-08-04&sr=b&sig=9Dsx94zE00GIz6hs%2Bfa8rxmQK4mKeuzDjA3eZnkYunw%3D',
         },
       });
     },

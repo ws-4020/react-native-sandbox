@@ -1,7 +1,7 @@
 import {useDeepLinkContext} from 'context';
 import Clipboard from 'expo-clipboard';
 import React, {useCallback, useState} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {KeyboardAvoidingView, Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Button, Input} from 'react-native-elements';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
@@ -36,27 +36,31 @@ export const DeepLink: React.FC = () => {
     }
   }, [createdLink]);
 
+  const url = link ? decodeURI(link.url) : undefined;
+
   return (
-    <View style={styles.body}>
-      <View style={styles.sectionContainer}>
-        <Text style={styles.sectionTitle}>Deep Link</Text>
-        <Text style={styles.sectionDescription}>{link ? link.url : 'リンクはありません。'}</Text>
-      </View>
-      <View style={styles.sectionContainer}>
-        <Text>チーム名を入力してください</Text>
-        <Input onChangeText={onChangeTeamName} />
-        <Button disabled={!teamName} onPress={createTeamLink} title="リンクを作成" />
-      </View>
-      {createdLink && (
+    <KeyboardAvoidingView behavior={Platform.select({ios: 'padding', android: undefined})}>
+      <View style={styles.body}>
         <View style={styles.sectionContainer}>
-          <Text style={styles.sectionTitle}>生成されたURLです。タッチするとコピーされます。</Text>
-          <TouchableOpacity onPress={copyToClipBoard}>
-            <Text>{createdLink}</Text>
-          </TouchableOpacity>
-          <Text style={styles.sectionDescription}>{copiedMessage}</Text>
+          <Text style={styles.sectionTitle}>Deep Link</Text>
+          <Text style={styles.sectionDescription}>{url ? url : 'リンクはありません。'}</Text>
         </View>
-      )}
-    </View>
+        <View style={styles.sectionContainer}>
+          <Text>チーム名を入力してください</Text>
+          <Input onChangeText={onChangeTeamName} />
+          <Button disabled={!teamName} onPress={createTeamLink} title="リンクを作成" />
+        </View>
+        {createdLink && (
+          <View style={styles.sectionContainer}>
+            <Text style={styles.sectionTitle}>生成されたURLです。タッチするとコピーされます。</Text>
+            <TouchableOpacity onPress={copyToClipBoard}>
+              <Text>{createdLink}</Text>
+            </TouchableOpacity>
+            <Text style={styles.sectionDescription}>{copiedMessage}</Text>
+          </View>
+        )}
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 
