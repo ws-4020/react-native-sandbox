@@ -46,7 +46,7 @@ Firebase Crashlyticsにログが送信されるタイミングは、アプリが
 
 なお、ReleaseモードではなくDebugモードでもアプリは動作しますが、Debugモードではエラー時にReact NativeがLogBoxにエラーログを表示する影響で、Firebase Crashlyticsにはログが送信されません。
 
-## Firebase Crashlyticsのコンソールに表示されているスタックトレースとソースマップのマッピング
+## Firebase Crashlyticsのコンソールに表示されているスタックトレースとソースコードのマッピング
 
 Firebase Crashlyticsのコンソールに表示されているJavaScriptで発生したエラーは、ソースマップが存在しないためエラー発生箇所が直感的にわからない表示となっています。
 
