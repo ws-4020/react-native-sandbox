@@ -14,7 +14,7 @@ React Nativeを使用したアプリのエラーハンドリングについて�
 * Native Modulesで発生したエラー
   * 同期処理
   * 非同期処理
-  
+
 グローバルにエラーを捕捉する方法としては、以下のような方法があります。
 
 | 方法 | 捕捉できるエラー |
@@ -45,6 +45,13 @@ npm run ios -- --configuration Release
 Firebase Crashlyticsにログが送信されるタイミングは、アプリがクラッシュした後に、再度アプリを起動した時になります。
 
 なお、ReleaseモードではなくDebugモードでもアプリは動作しますが、Debugモードではエラー時にReact NativeがLogBoxにエラーログを表示する影響で、Firebase Crashlyticsにはログが送信されません。
+
+iPhoneでアプリを実行するには、以下の手順が必要です。
+* `PersonalAccount.xcconfig`を作成して、個人アカウントを設定する
+  * 設定したら、`xed ios`で一回Xcodeプロジェクトを開いてください
+* Firebase Consoleで、Bundle Identifierに個人のサフィックスを追加してアプリを追加する
+* 追加したアプリでCrashlyticsを有効にする
+* `GoogleService-Info.plist`をダウンロードして、`ios`ディレクトリに格納する
 
 ## Firebase Crashlyticsのコンソールに表示されているスタックトレースとソースコードのマッピング
 
@@ -86,18 +93,18 @@ npm run bundle
 `[プロジェクトルート]/generated`に、`index.[android/ios].bundle.map`が作成されます。
 
 次に、Firebase Crashlyticsのコンソールに表示されているスタックトレースをコピーして、任意のファイル、ディレクトリに格納します。
-ここでは、`[プロジェクトルート]/stacktrace.txt`に保存する仮定とします。
+ここでは、`[プロジェクトルート]/stack-trace.txt`に保存する仮定とします。
 
 次に、ソースマップを使って、スタックトレースとソースコードをマッピングします。
 
 【Android】
 ```bash
-npm run symbolicate:ios -- < stacktrace.txt
+cat stack-trace.txt | npm run symbolicate:ios
 ```
 
 【iOS】
 ```bash
-npm run symbolicate:ios -- < stacktrace.txt
+cat stack-trace.txt | npm run symbolicate:ios
 ```
 
 実行後、以下のようなスタックトレースが標準出力され、エラー発生箇所がわかるようになります。

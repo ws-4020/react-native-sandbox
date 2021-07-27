@@ -68,3 +68,6 @@ junit.xml
 
 # Local environmental variables
 ios/PersonalAccount.xcconfig
+
+# Other
+stack-trace*
