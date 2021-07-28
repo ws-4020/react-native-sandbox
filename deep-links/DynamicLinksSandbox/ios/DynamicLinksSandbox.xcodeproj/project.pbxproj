@@ -345,7 +345,7 @@
 				CODE_SIGN_ENTITLEMENTS = DynamicLinksSandbox/DynamicLinksSandboxDebug.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1.04;
+				CURRENT_PROJECT_VERSION = 1.05;
 				DEVELOPMENT_TEAM = 7Y9M87SSC3;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -379,7 +379,7 @@
 				CODE_SIGN_ENTITLEMENTS = DynamicLinksSandbox/DynamicLinksSandbox.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1.04;
+				CURRENT_PROJECT_VERSION = 1.05;
 				DEVELOPMENT_TEAM = 7Y9M87SSC3;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = DynamicLinksSandbox/Info.plist;
@@ -581,7 +581,7 @@
 				CODE_SIGN_ENTITLEMENTS = DynamicLinksSandbox/DynamicLinksSandbox.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1.04;
+				CURRENT_PROJECT_VERSION = 1.05;
 				DEVELOPMENT_TEAM = 7Y9M87SSC3;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
