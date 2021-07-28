@@ -1,12 +1,13 @@
 import {useDeepLinkContext} from 'context';
 import Clipboard from 'expo-clipboard';
 import React, {useCallback, useState} from 'react';
-import {KeyboardAvoidingView, Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {KeyboardAvoidingView, Linking, Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Button, Input} from 'react-native-elements';
+import {ScrollView} from 'react-native-gesture-handler';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 export const DeepLink: React.FC = () => {
-  const {link, createLink} = useDeepLinkContext();
+  const {link, event, createLink, debugLink} = useDeepLinkContext();
   const [teamName, setTeamName] = useState<string>();
   const [createdLink, setCreatedLink] = useState<string>();
   const [copiedMessage, setCopiedMessage] = useState<string>();
@@ -37,29 +38,39 @@ export const DeepLink: React.FC = () => {
   }, [createdLink]);
 
   const url = link ? decodeURI(link.url) : undefined;
+  const debugUrl = debugLink ? decodeURI(debugLink) : undefined;
 
   return (
     <KeyboardAvoidingView behavior={Platform.select({ios: 'padding', android: undefined})}>
-      <View style={styles.body}>
-        <View style={styles.sectionContainer}>
-          <Text style={styles.sectionTitle}>Deep Link</Text>
-          <Text style={styles.sectionDescription}>{url ? url : 'リンクはありません。'}</Text>
-        </View>
-        <View style={styles.sectionContainer}>
-          <Text>チーム名を入力してください</Text>
-          <Input onChangeText={onChangeTeamName} />
-          <Button disabled={!teamName} onPress={createTeamLink} title="リンクを作成" />
-        </View>
-        {createdLink && (
+      <ScrollView>
+        <View style={styles.body}>
           <View style={styles.sectionContainer}>
-            <Text style={styles.sectionTitle}>生成されたURLです。タッチするとコピーされます。</Text>
-            <TouchableOpacity onPress={copyToClipBoard}>
-              <Text>{createdLink}</Text>
-            </TouchableOpacity>
-            <Text style={styles.sectionDescription}>{copiedMessage}</Text>
+            <Text style={styles.sectionTitle}>Deep Link</Text>
+            <Text style={styles.sectionDescription}>{event ? `イベント: ${event} で開きました` : ''}</Text>
+            <Text style={styles.sectionDescription}>{url ? url : 'リンクはありません。'}</Text>
+            <Text style={styles.sectionDescription}>(検証用：{debugUrl})</Text>
           </View>
-        )}
-      </View>
+          <View style={styles.sectionContainer}>
+            <Text>チーム名を入力してください</Text>
+            <Input onChangeText={onChangeTeamName} />
+            <Button disabled={!teamName} onPress={createTeamLink} title="リンクを作成" />
+          </View>
+          {createdLink && (
+            <View style={styles.sectionContainer}>
+              <Text style={styles.sectionTitle}>生成されたURLです。タッチするとコピーされます。</Text>
+              <TouchableOpacity onPress={copyToClipBoard}>
+                <Text>{createdLink}</Text>
+              </TouchableOpacity>
+              <Text style={styles.sectionDescription}>{copiedMessage}</Text>
+              <Button
+                disabled={!createdLink}
+                onPress={() => Linking.openURL(createdLink)}
+                title="生成したURLをアプリ内でタップ"
+              />
+            </View>
+          )}
+        </View>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 };
@@ -68,15 +79,19 @@ export const DeepLink: React.FC = () => {
 const styles = StyleSheet.create({
   body: {
     backgroundColor: Colors.white,
+    paddingBottom: 50,
   },
   sectionContainer: {
     marginTop: 32,
     paddingHorizontal: 24,
   },
   sectionTitle: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: '600',
     color: Colors.black,
+  },
+  link: {
+    color: 'blue',
   },
   sectionDescription: {
     marginTop: 8,

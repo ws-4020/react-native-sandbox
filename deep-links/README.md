@@ -71,6 +71,8 @@ GoogleService-Info.plistをDownloadして設定する。
 
 「ドメインの関連付け」を利用しないで実装、テストできるスコープは検証できていない。（URL作成には関連付けは不要なはず）
 
+RESOLVE:GoogleService-Info.plistのbundleIdと比較していないので個人開発者アカウントでURLの作成可能。
+
 #### Webサイトの構築
 
 本来はユーザがWebサイトにアクセスするか、アプリで起動するかを選択できる。
