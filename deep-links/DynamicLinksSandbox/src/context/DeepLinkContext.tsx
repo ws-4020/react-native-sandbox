@@ -19,7 +19,7 @@ export const DeepLinkContextProvider: React.FC = ({children}) => {
     setDeepLink(link);
   };
 
-  const logging = (e: any) => console.log(e);
+  const errorHandling = (e: any) => console.log(e);
 
   useEffect(() => {
     dynamicLinks()
@@ -30,7 +30,7 @@ export const DeepLinkContextProvider: React.FC = ({children}) => {
           setEvent('initial link');
         }
       })
-      .catch(logging);
+      .catch(errorHandling);
     // forground
     const unsubscribe = dynamicLinks().onLink((link) => {
       handleLink(link);
