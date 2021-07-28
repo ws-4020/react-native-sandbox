@@ -1,17 +1,17 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Button} from 'react-native-elements';
 
 const ScreenName = 'ErrorInEventHandler';
 const Screen = () => {
   const throwErrorInSyncProcess = useCallback(() => {
-    throw new Error('Error has occurred in synchronous process.');
+    throw new Error('Error has occurred in synchronous process of EventHandler.');
   }, []);
 
   const throwErrorInAsyncProcess = useCallback(() => {
     // eslint-disable-next-line no-void
     void new Promise(() => {
-      throw new Error('Error has occurred in asynchronous process.');
+      throw new Error('Error has occurred in asynchronous process of EventHandler.');
     });
   }, []);
 
