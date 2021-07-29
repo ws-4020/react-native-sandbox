@@ -21,7 +21,9 @@ Android向けとiOS向けにGoogleServiceの設定ファイルを配置します
 1. `android/app/active_debug.keystore`で配置（あやまってコミットしないため）
 1. `active_debug.keystore`を利用するように`android/app/build.gradle`を修正
 
-1か2を実施せずに起動してしまった場合はアプリをUninstallしてください。（署名不一致でInstallできないため）# ディープリンク
+1か2を実施せずに起動してしまった場合はアプリをUninstallしてください。（署名不一致でInstallできないため）
+
+# ディープリンク
 
 Dynamic Linksを利用して「アプリケーションを開くURLの作成」と「URLからアプリを起動できる設定」を検証する。
 
