@@ -4,6 +4,7 @@ import {Linking} from 'react-native';
 
 interface ContextValueType {
   link?: FirebaseDynamicLinksTypes.DynamicLink;
+  initLink?: FirebaseDynamicLinksTypes.DynamicLink;
   event?: string;
   createLink: (key: string, value: string) => Promise<string>;
 }
@@ -13,12 +14,10 @@ export const DeepLinkContext = React.createContext<ContextValueType>({} as Conte
 export const useDeepLinkContext = () => useContext(DeepLinkContext);
 
 export const DeepLinkContextProvider: React.FC = ({children}) => {
-  const [deepLink, setDeepLink] = useState<FirebaseDynamicLinksTypes.DynamicLink>();
+  const [link, setLink] = useState<FirebaseDynamicLinksTypes.DynamicLink>();
+  const [initLink, setInitLink] = useState<FirebaseDynamicLinksTypes.DynamicLink>();
   const [event, setEvent] = useState<string>();
   const links = dynamicLinks();
-  const handleLink = (link: FirebaseDynamicLinksTypes.DynamicLink) => {
-    setDeepLink(link);
-  };
 
   const errorHandling = (e: any) => console.log(e);
 
@@ -27,21 +26,22 @@ export const DeepLinkContextProvider: React.FC = ({children}) => {
       .getInitialLink()
       .then((link) => {
         if (link) {
-          handleLink(link);
+          setInitLink(link);
           setEvent('initial link');
         }
       })
       .catch(errorHandling);
     // forground
     const unsubscribe = links.onLink((link) => {
-      handleLink(link);
+      setLink(link);
       setEvent('on link');
     });
     return () => unsubscribe();
   }, [links]);
 
   const contextValue: ContextValueType = {
-    link: deepLink,
+    link,
+    initLink,
     event,
     createLink: async (key, value) => {
       const encodedKey = encodeURI(key);
