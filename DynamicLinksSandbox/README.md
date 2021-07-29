@@ -23,7 +23,7 @@ Android向けとiOS向けにGoogleServiceの設定ファイルを配置します
 
 1か2を実施せずに起動してしまった場合はアプリをUninstallしてください。（署名不一致でInstallできないため）# ディープリンク
 
-Dynamic Linksを利用して「アプリケーションのURLの作成」と「URLからアプリを起動できる設定」を検証する。
+Dynamic Linksを利用して「アプリケーションを開くURLの作成」と「URLからアプリを起動できる設定」を検証する。
 
 ## 環境構築
 
@@ -46,7 +46,7 @@ Customドメイン（たとえば`sandbox.ws-4020.mobile-app.com`など）も利
 
 ### iOSアプリ
 
-ドメインの関連付けがiOSは高度な機能のためADPライセンスを利用する。
+iOSでのドメインの関連付け（[Associated Domains](https://help.apple.com/developer-account/?lang=ja#/dev21218dfd6)）は高度な機能に含まれるため、ADPライセンスを利用する。
 （作成したアプリケーションはTestFlightにて配信しているため、個別にソースを修正しない場合はそちらから取得すること。）
 
 GoogleService-Info.plistをDownloadして設定する。
