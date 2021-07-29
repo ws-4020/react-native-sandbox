@@ -15,6 +15,7 @@ export const useDeepLinkContext = () => useContext(DeepLinkContext);
 export const DeepLinkContextProvider: React.FC = ({children}) => {
   const [deepLink, setDeepLink] = useState<FirebaseDynamicLinksTypes.DynamicLink>();
   const [event, setEvent] = useState<string>();
+  const links = dynamicLinks();
   const handleLink = (link: FirebaseDynamicLinksTypes.DynamicLink) => {
     setDeepLink(link);
   };
@@ -22,7 +23,7 @@ export const DeepLinkContextProvider: React.FC = ({children}) => {
   const errorHandling = (e: any) => console.log(e);
 
   useEffect(() => {
-    dynamicLinks()
+    links
       .getInitialLink()
       .then((link) => {
         if (link) {
@@ -32,12 +33,12 @@ export const DeepLinkContextProvider: React.FC = ({children}) => {
       })
       .catch(errorHandling);
     // forground
-    const unsubscribe = dynamicLinks().onLink((link) => {
+    const unsubscribe = links.onLink((link) => {
       handleLink(link);
       setEvent('on link');
     });
     return () => unsubscribe();
-  }, []);
+  }, [links]);
 
   const contextValue: ContextValueType = {
     link: deepLink,
@@ -54,9 +55,8 @@ export const DeepLinkContextProvider: React.FC = ({children}) => {
         },
         android: {
           packageName: 'ws4020.reactnative.sandbox',
-          // Azure Blob Storage SAS or Play Store
-          fallbackUrl:
-            'https://reactnativesandbox.blob.core.windows.net/$web/deeplink/app-release.apk?sp=r&st=2021-07-26T08:29:47Z&se=2021-07-26T16:29:47Z&spr=https&sv=2020-08-04&sr=b&sig=9Dsx94zE00GIz6hs%2Bfa8rxmQK4mKeuzDjA3eZnkYunw%3D',
+          // Deploy Gate App
+          fallbackUrl: 'https://play.google.com/store/apps/details?id=com.deploygate&hl=ja&gl=US',
         },
       });
     },
