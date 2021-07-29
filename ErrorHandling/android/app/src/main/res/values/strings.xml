@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ErrorHandling</string>
+    <string name="system_error_title">予期しないエラー</string>
+    <string name="system_error_message">アプリを再起動してください\n\nErrorCode: 0000</string>
+</resources>
