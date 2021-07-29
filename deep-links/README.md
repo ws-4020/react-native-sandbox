@@ -23,7 +23,7 @@ Customドメイン（たとえば`sandbox.ws-4020.mobile-app.com`など）も利
 
 ### iOSアプリ
 
-ドメインの関連付けがiOSは高度な機能のためADPライセンスを利用する。
+iOSでのドメインの関連付け（[Associated Domains](https://help.apple.com/developer-account/?lang=ja#/dev21218dfd6)）は高度な機能に含まれるため、ADPライセンスを利用する。
 （作成したアプリケーションはTestFlightにて配信しているため、個別にソースを修正しない場合はそちらから取得すること。）
 
 GoogleService-Info.plistをDownloadして設定する。
