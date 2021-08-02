@@ -40,7 +40,7 @@ export const DeepLink: React.FC = () => {
 
   const openCreatedUrl = useCallback(() => {
     if (createdLink) {
-      Linking.openURL(createdLink).catch((e) => console.log(e));
+      Linking.emit('url', {url: createdLink});
     }
   }, [createdLink]);
 

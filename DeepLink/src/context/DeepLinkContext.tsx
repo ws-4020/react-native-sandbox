@@ -1,5 +1,6 @@
 import dynamicLinks, {FirebaseDynamicLinksTypes} from '@react-native-firebase/dynamic-links';
 import React, {useContext, useEffect, useState} from 'react';
+import {Linking} from 'react-native';
 
 interface ContextValueType {
   link?: FirebaseDynamicLinksTypes.DynamicLink;
@@ -28,11 +29,18 @@ export const DeepLinkContextProvider: React.FC = ({children}) => {
       })
       .catch(errorHandling);
     // forground
-    const unsubscribe = dynamicLinks().onLink((link) => {
-      setLink(link);
-      setEvent('on link');
+    Linking.addEventListener('url', (url) => {
+      if (url) {
+        dynamicLinks()
+          .resolveLink(url.url)
+          .then((link) => {
+            setLink(link);
+            setEvent('on Link');
+          })
+          .catch((e) => console.log(e));
+      }
     });
-    return () => unsubscribe();
+    return () => Linking.removeAllListeners('url');
   }, []);
 
   const contextValue: ContextValueType = {
