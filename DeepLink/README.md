@@ -66,7 +66,7 @@ GoogleService-Info.plistをDownloadして設定する。
 
 - Firebase Console上で作成したURLでアプリケーションが起動する。
 - アプリが作成したURLを共有してアプリが起動する。
-- 未インストール時はAndriodはAzure Blob StorageにてAPKファイル、iOSはTestFlightに遷移してインストール後に起動してもらう。
+- 未インストール時はAndroidはDeploy GateにてAPKファイル、iOSはTestFlightに遷移してインストール後に起動してもらう。
 
 いずれの場合もURLからアプリケーションに遷移した場合に、Linkの情報を取得してアプリで確認できる。
 
