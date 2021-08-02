@@ -85,7 +85,7 @@ GoogleService-Info.plistをDownloadして設定する。
 詳しくは[オペレーティングシステムを統合する](https://firebase.google.com/docs/dynamic-links/operating-system-integrations)のiOSフローチャートを参照。
 
 |No|アプリ起動|起動回数|クリップボード|利用されるデータ|
-|:-|:-------|:-----|:----|
+|:-|:-------|:-------|:-----|:----|
 |1|リンクをタップ|0|有|クリップボード|
 |2|リンクをタップ|0|なし|リンク|
 |3|リンクをタップ|1以上|有|リンク|
