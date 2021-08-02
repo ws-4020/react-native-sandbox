@@ -1,4 +1,4 @@
-# DynamicLinksSandbox
+# ディープリンク
 
 ## 環境構築
 
