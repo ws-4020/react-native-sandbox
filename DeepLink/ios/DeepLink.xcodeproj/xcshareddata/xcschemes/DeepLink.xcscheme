@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "DynamicLinksSandbox.app"
-               BlueprintName = "DynamicLinksSandbox"
-               ReferencedContainer = "container:DynamicLinksSandbox.xcodeproj">
+               BuildableName = "DeepLink.app"
+               BlueprintName = "DeepLink"
+               ReferencedContainer = "container:DeepLink.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "DynamicLinksSandboxTests.xctest"
-               BlueprintName = "DynamicLinksSandboxTests"
-               ReferencedContainer = "container:DynamicLinksSandbox.xcodeproj">
+               BuildableName = "DeepLinkTests.xctest"
+               BlueprintName = "DeepLinkTests"
+               ReferencedContainer = "container:DeepLink.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "DynamicLinksSandbox.app"
-            BlueprintName = "DynamicLinksSandbox"
-            ReferencedContainer = "container:DynamicLinksSandbox.xcodeproj">
+            BuildableName = "DeepLink.app"
+            BlueprintName = "DeepLink"
+            ReferencedContainer = "container:DeepLink.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "DynamicLinksSandbox.app"
-            BlueprintName = "DynamicLinksSandbox"
-            ReferencedContainer = "container:DynamicLinksSandbox.xcodeproj">
+            BuildableName = "DeepLink.app"
+            BlueprintName = "DeepLink"
+            ReferencedContainer = "container:DeepLink.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
