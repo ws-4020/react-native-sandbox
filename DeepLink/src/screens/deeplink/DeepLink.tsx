@@ -1,3 +1,4 @@
+import {useLinking} from '@react-navigation/native';
 import {useDeepLinkContext} from 'context';
 import Clipboard from 'expo-clipboard';
 import React, {useCallback, useState} from 'react';
@@ -7,7 +8,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 export const DeepLink: React.FC = () => {
-  const {link, initLink, event, createLink} = useDeepLinkContext();
+  const {link, event, createLink} = useDeepLinkContext();
   const [teamName, setTeamName] = useState<string>();
   const [createdLink, setCreatedLink] = useState<string>();
   const [copiedMessage, setCopiedMessage] = useState<string>();
@@ -37,8 +38,13 @@ export const DeepLink: React.FC = () => {
     }
   }, [createdLink]);
 
+  const openCreatedUrl = useCallback(() => {
+    if (createdLink) {
+      Linking.openURL(createdLink).catch((e) => console.log(e));
+    }
+  }, [createdLink]);
+
   const url = link ? decodeURI(link.url) : undefined;
-  const initUrl = initLink ? decodeURI(initLink.url) : undefined;
 
   return (
     <KeyboardAvoidingView behavior={Platform.select({ios: 'padding', android: undefined})}>
@@ -48,7 +54,6 @@ export const DeepLink: React.FC = () => {
             <Text style={styles.sectionTitle}>Deep Link</Text>
             <Text style={styles.sectionDescription}>{event ? `イベント: ${event} で開きました` : ''}</Text>
             <Text style={styles.sectionDescription}>{url ? url : 'リンクはありません。'}</Text>
-            <Text style={styles.sectionDescription}>{initUrl}</Text>
           </View>
           <View style={styles.sectionContainer}>
             <Text>チーム名を入力してください</Text>
@@ -62,11 +67,7 @@ export const DeepLink: React.FC = () => {
                 <Text>{createdLink}</Text>
               </TouchableOpacity>
               <Text style={styles.sectionDescription}>{copiedMessage}</Text>
-              <Button
-                disabled={!createdLink}
-                onPress={() => Linking.openURL(createdLink)}
-                title="生成したURLをアプリから開く"
-              />
+              <Button disabled={!createdLink} onPress={openCreatedUrl} title="生成したURLをアプリから開く" />
             </View>
           )}
         </View>
