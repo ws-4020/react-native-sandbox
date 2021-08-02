@@ -1,4 +1,3 @@
-import {useLinking} from '@react-navigation/native';
 import {useDeepLinkContext} from 'context';
 import Clipboard from 'expo-clipboard';
 import React, {useCallback, useState} from 'react';

@@ -345,7 +345,7 @@
 				CODE_SIGN_ENTITLEMENTS = DeepLink/DeepLinkDebug.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1.05;
+				CURRENT_PROJECT_VERSION = 1.07;
 				DEVELOPMENT_TEAM = 7Y9M87SSC3;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -379,7 +379,7 @@
 				CODE_SIGN_ENTITLEMENTS = DeepLink/DeepLink.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1.05;
+				CURRENT_PROJECT_VERSION = 1.07;
 				DEVELOPMENT_TEAM = 7Y9M87SSC3;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = DeepLink/Info.plist;
@@ -581,7 +581,7 @@
 				CODE_SIGN_ENTITLEMENTS = DeepLink/DeepLink.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1.05;
+				CURRENT_PROJECT_VERSION = 1.07;
 				DEVELOPMENT_TEAM = 7Y9M87SSC3;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
