@@ -92,25 +92,23 @@ GoogleService-Info.plistをDownloadして設定する。
 
 リトライしてもらうことはユーザに大きな負担をかけないため、許容する。
 
+### ライセンスによる制限
+
+「ドメインの関連付け」を利用しないでもアプリケーションの起動はGoogleService-Info.plistのbundleIdと比較していないので個人開発者アカウントでURLの作成可能である。
+
+開発用のGoogleService-Info.plistとgoogle-service.jsonを作成しSDKを設定してから開発者に配布すればよい。
+
 ### 未検証ポイント
 
 - GooglePlay、 AppStoreを利用
-- iOSのライセンスによる制限
 - Webサイトの構築
 - Androidアプリを複数作成
-
 
 #### Google Play、App Storeを利用
 
 アプリを公開できていないため、未インストール時にStoreに誘導することは未検証。
 そのため、Google Playの内部テスト版での検証などもできていない。
 ただし、アプリのリンク作成時に `fallbackUrl` を設定するためビルドバリアントで切り替えるようにすれば対応できる想定。
-
-#### iOSのライセンスによる制限
-
-「ドメインの関連付け」を利用しないで実装、テストできるスコープは検証できていない。（URL作成には関連付けは不要なはず）
-
-RESOLVE:GoogleService-Info.plistのbundleIdと比較していないので個人開発者アカウントでURLの作成可能。
 
 #### Webサイトの構築
 
@@ -146,11 +144,11 @@ upload.store -> sha256 _|
 
 ### Androidで利用する
 
-アプリがインストールされていない場合のURLをAzure Blob Storageにむければできる。
+アプリがインストールされていない場合のURLをDeploy Gateにむければできる。
 
  1. linkを作成
- 1. アプリがインストールされていないURLをSASのURLにする
- 1. APKのインストール手順にしたがい、インストール
+ 1. アプリがインストールされていないURLをDeploy Gate AppのURLにする
+ 1. インストール手順にしたがい、インストール
  1. アプリを起動
 
 ## Dynamicリンクを作成する
