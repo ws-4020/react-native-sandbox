@@ -1,0 +1,150 @@
+diff --git a/node_modules/@react-native-firebase/dynamic-links/ios/RNFBDynamicLinks/RNFBDynamicLinksAppDelegateInterceptor.h b/node_modules/@react-native-firebase/dynamic-links/ios/RNFBDynamicLinks/RNFBDynamicLinksAppDelegateInterceptor.h
+index df28359..76b40b2 100644
+--- a/node_modules/@react-native-firebase/dynamic-links/ios/RNFBDynamicLinks/RNFBDynamicLinksAppDelegateInterceptor.h
++++ b/node_modules/@react-native-firebase/dynamic-links/ios/RNFBDynamicLinks/RNFBDynamicLinksAppDelegateInterceptor.h
+@@ -27,10 +27,10 @@ static NSString *const LINK_RECEIVED_EVENT = @"dynamic_links_link_received";
+ @interface RNFBDynamicLinksAppDelegateInterceptor : NSObject <UIApplicationDelegate>
+ @property (strong, readwrite) NSString *_Nullable initialLinkUrl;
+ @property (strong, readwrite) NSString *_Nullable initialLinkMinimumAppVersion;
++@property (readwrite) NSNumber *_Nullable initialLinkMatchType;
+ 
+ + (instancetype)sharedInstance;
+ 
+-
+ @end
+ 
+ NS_ASSUME_NONNULL_END
+diff --git a/node_modules/@react-native-firebase/dynamic-links/ios/RNFBDynamicLinks/RNFBDynamicLinksAppDelegateInterceptor.m b/node_modules/@react-native-firebase/dynamic-links/ios/RNFBDynamicLinks/RNFBDynamicLinksAppDelegateInterceptor.m
+index e79fde1..be4e04f 100644
+--- a/node_modules/@react-native-firebase/dynamic-links/ios/RNFBDynamicLinks/RNFBDynamicLinksAppDelegateInterceptor.m
++++ b/node_modules/@react-native-firebase/dynamic-links/ios/RNFBDynamicLinks/RNFBDynamicLinksAppDelegateInterceptor.m
+@@ -28,6 +28,7 @@
+     sharedInstance = [[RNFBDynamicLinksAppDelegateInterceptor alloc] init];
+     sharedInstance.initialLinkUrl = nil;
+     sharedInstance.initialLinkMinimumAppVersion = nil;
++    sharedInstance.initialLinkMatchType = nil;
+     [GULAppDelegateSwizzler proxyOriginalDelegate];
+     [GULAppDelegateSwizzler registerAppDelegateInterceptor:sharedInstance];
+   });
+@@ -64,10 +65,12 @@
+     if (_initialLinkUrl == nil) {
+       _initialLinkUrl = dynamicLink.url.absoluteString;
+       _initialLinkMinimumAppVersion = dynamicLink.minimumAppVersion;
++      _initialLinkMatchType =  [[self class] numberWithMatchType:dynamicLink.matchType];
+     }
+     [[RNFBRCTEventEmitter shared] sendEventWithName:LINK_RECEIVED_EVENT body:@{
+         @"url": dynamicLink.url.absoluteString,
+         @"minimumAppVersion": dynamicLink.minimumAppVersion == nil ? [NSNull null] : dynamicLink.minimumAppVersion,
++        @"matchType":  [[self class] numberWithMatchType:dynamicLink.matchType],
+     }];
+   }
+ 
+@@ -75,6 +78,19 @@
+   return NO;
+ }
+ 
+++ (NSNumber *)numberWithMatchType:(FIRDLMatchType)matchType {
++  switch (matchType) {
++    case FIRDLMatchTypeNone:
++      return @0;
++    case FIRDLMatchTypeWeak:
++      return @1;
++    case FIRDLMatchTypeDefault:
++      return @2;
++    case FIRDLMatchTypeUnique:
++      return @3;
++  }
++}
++
+ #pragma mark - User Activities overridden handler methods
+ 
+ - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray *restorableObjects))restorationHandler {
+@@ -85,10 +101,12 @@
+       if (_initialLinkUrl == nil) {
+         _initialLinkUrl = dynamicLink.url.absoluteString;
+         _initialLinkMinimumAppVersion = dynamicLink.minimumAppVersion;
++        _initialLinkMatchType =  [[self class] numberWithMatchType:dynamicLink.matchType];
+       }
+       [[RNFBRCTEventEmitter shared] sendEventWithName:LINK_RECEIVED_EVENT body:@{
+           @"url": dynamicLink.url.absoluteString,
+           @"minimumAppVersion": dynamicLink.minimumAppVersion == nil ? [NSNull null] : dynamicLink.minimumAppVersion,
++          @"matchType":  [[self class] numberWithMatchType:dynamicLink.matchType],
+       }];
+     }
+ 
+diff --git a/node_modules/@react-native-firebase/dynamic-links/ios/RNFBDynamicLinks/RNFBDynamicLinksModule.m b/node_modules/@react-native-firebase/dynamic-links/ios/RNFBDynamicLinks/RNFBDynamicLinksModule.m
+index 8c5fcc6..b6303bc 100644
+--- a/node_modules/@react-native-firebase/dynamic-links/ios/RNFBDynamicLinks/RNFBDynamicLinksModule.m
++++ b/node_modules/@react-native-firebase/dynamic-links/ios/RNFBDynamicLinks/RNFBDynamicLinksModule.m
+@@ -129,11 +129,14 @@ RCT_EXPORT_METHOD(getInitialLink:
+       resolve(@{
+           @"url": dynamicLink.url.absoluteString,
+           @"minimumAppVersion": dynamicLink.minimumAppVersion == nil ? [NSNull null] : dynamicLink.minimumAppVersion,
++          @"matchType":  [[self class] numberWithMatchType:dynamicLink.matchType],
++          
+       });
+     } else if ([RNFBDynamicLinksAppDelegateInterceptor sharedInstance].initialLinkUrl != nil) {
+       resolve(@{
+           @"url": [RNFBDynamicLinksAppDelegateInterceptor sharedInstance].initialLinkUrl,
+           @"minimumAppVersion": [RNFBDynamicLinksAppDelegateInterceptor sharedInstance].initialLinkMinimumAppVersion == nil ? [NSNull null] : [RNFBDynamicLinksAppDelegateInterceptor sharedInstance].initialLinkMinimumAppVersion,
++          @"matchType": [RNFBDynamicLinksAppDelegateInterceptor sharedInstance].initialLinkMatchType,
+       });
+     } else {
+       resolve([NSNull null]);
+@@ -151,11 +154,13 @@ RCT_EXPORT_METHOD(getInitialLink:
+         resolve(@{
+             @"url": dynamicLink.url.absoluteString,
+             @"minimumAppVersion": dynamicLink.minimumAppVersion == nil ? [NSNull null] : dynamicLink.minimumAppVersion,
++            @"matchType":  [[self class] numberWithMatchType:dynamicLink.matchType],
+         });
+       } else if (!error && [RNFBDynamicLinksAppDelegateInterceptor sharedInstance].initialLinkUrl != nil) {
+         resolve(@{
+             @"url": [RNFBDynamicLinksAppDelegateInterceptor sharedInstance].initialLinkUrl,
+             @"minimumAppVersion": [RNFBDynamicLinksAppDelegateInterceptor sharedInstance].initialLinkMinimumAppVersion == nil ? [NSNull null] : [RNFBDynamicLinksAppDelegateInterceptor sharedInstance].initialLinkMinimumAppVersion,
++            @"matchType": [RNFBDynamicLinksAppDelegateInterceptor sharedInstance].initialLinkMatchType,
+         });
+       } else if (error) {
+         [RNFBSharedUtils rejectPromiseWithUserInfo:reject userInfo:(NSMutableDictionary *) @{
+@@ -176,6 +181,7 @@ RCT_EXPORT_METHOD(getInitialLink:
+     resolve(@{
+         @"url": [RNFBDynamicLinksAppDelegateInterceptor sharedInstance].initialLinkUrl,
+         @"minimumAppVersion": [RNFBDynamicLinksAppDelegateInterceptor sharedInstance].initialLinkMinimumAppVersion == nil ? [NSNull null] : [RNFBDynamicLinksAppDelegateInterceptor sharedInstance].initialLinkMinimumAppVersion,
++        @"matchType": [RNFBDynamicLinksAppDelegateInterceptor sharedInstance].initialLinkMatchType,
+     });
+   } else {
+     resolve([NSNull null]);
+@@ -192,6 +198,7 @@ RCT_EXPORT_METHOD(resolveLink:
+         resolve(@{
+             @"url": dynamicLink.url.absoluteString,
+             @"minimumAppVersion": dynamicLink.minimumAppVersion == nil ? [NSNull null] : dynamicLink.minimumAppVersion,
++            @"matchType": [[self class] numberWithMatchType:dynamicLink.matchType],
+         });
+     } else if (!error || (error && [error.localizedDescription containsString:@"dynamicLinks error 404"])) {
+       [RNFBSharedUtils rejectPromiseWithUserInfo:reject userInfo:(NSMutableDictionary *) @{
+@@ -223,7 +230,6 @@ RCT_EXPORT_METHOD(resolveLink:
+   return linkComponents;
+ }
+ 
+-
+ - (void)buildAnalyticsParameters:(NSDictionary *)analyticsDict components:(FIRDynamicLinkComponents *)linkComponents {
+   if (analyticsDict == nil) return;
+ 
+@@ -351,6 +357,18 @@ RCT_EXPORT_METHOD(resolveLink:
+   linkComponents.socialMetaTagParameters = socialParams;
+ }
+ 
+++ (NSNumber *)numberWithMatchType:(FIRDLMatchType)matchType {
++  switch (matchType) {
++    case FIRDLMatchTypeNone:
++      return @0;
++    case FIRDLMatchTypeWeak:
++      return @1;
++    case FIRDLMatchTypeDefault:
++      return @2;
++    case FIRDLMatchTypeUnique:
++      return @3;
++  }
++}
+ 
+ - (NSArray<NSString *> *)supportedEvents {
+   return @[];
