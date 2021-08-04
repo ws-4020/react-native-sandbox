@@ -29,6 +29,7 @@ build/
 .gradle
 local.properties
 *.iml
+*.hprof
 
 # node.js
 #
@@ -42,17 +43,6 @@ buck-out/
 *.keystore
 !debug.keystore
 
-# fastlane
-#
-# It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
-# screenshots whenever they are needed.
-# For more information about the recommended setup visit:
-# https://docs.fastlane.tools/best-practices/source-control/
-
-*/fastlane/report.xml
-*/fastlane/Preview.html
-*/fastlane/screenshots
-
 # Bundle artifacts
 *.jsbundle
 
@@ -60,7 +50,7 @@ buck-out/
 /ios/Pods/
 
 # Expo
-.expo/*
+.expo/
 web-build/
 
 # Jest
@@ -69,5 +59,9 @@ junit.xml
 # Local environmental variables
 ios/PersonalAccount.xcconfig
 
-# Other
-stack-trace*
+# Firebase
+GoogleService-Info.plist
+google-services.json
+
+# generated
+/generated
