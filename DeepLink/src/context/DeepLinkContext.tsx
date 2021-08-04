@@ -25,6 +25,8 @@ export const DeepLinkContextProvider: React.FC = ({children}) => {
     if (Platform.OS !== 'ios' || link?.matchType === 3) {
       setLink(link);
       setEvent(event);
+    } else {
+      setEvent(`unsafe link (${link.matchType ? link.matchType : 'no match type'})`);
     }
   };
 
