@@ -1,6 +1,6 @@
 import dynamicLinks, {FirebaseDynamicLinksTypes} from '@react-native-firebase/dynamic-links';
 import React, {useContext, useEffect, useState} from 'react';
-import {Linking} from 'react-native';
+import {Linking, Platform} from 'react-native';
 
 interface ContextValueType {
   link?: FirebaseDynamicLinksTypes.DynamicLink;
@@ -18,14 +18,21 @@ export const DeepLinkContextProvider: React.FC = ({children}) => {
 
   const errorHandling = (e: any) => console.log(e);
 
+  const setSafeLink = (link: FirebaseDynamicLinksTypes.DynamicLink | null, event: string) => {
+    if (!link) {
+      return;
+    }
+    if (Platform.OS !== 'ios' || link?.matchType === 3) {
+      setLink(link);
+      setEvent(event);
+    }
+  };
+
   useEffect(() => {
     dynamicLinks()
       .getInitialLink()
       .then((link) => {
-        if (link) {
-          setLink(link);
-          setEvent('initial link');
-        }
+        setSafeLink(link, 'initial link');
       })
       .catch(errorHandling);
     // forground
@@ -34,8 +41,8 @@ export const DeepLinkContextProvider: React.FC = ({children}) => {
         dynamicLinks()
           .resolveLink(url.url)
           .then((link) => {
-            setLink(link);
-            setEvent('on Link');
+            console.log('in init link', link);
+            setSafeLink(link, 'on link');
           })
           .catch((e) => console.log(e));
       }
