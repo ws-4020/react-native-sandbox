@@ -9,6 +9,7 @@ import {
   ErrorInUseEffectSyncProcess,
 } from '../screens';
 import {ErrorInUseEffectAsyncProcess} from '../screens/ErrorInUseEffectAsyncProcess';
+import {ErrorInWebView} from '../screens/ErrorInWebView';
 
 const nav = createStackNavigator();
 export const RootStackNav: React.FC = () => {
@@ -20,6 +21,7 @@ export const RootStackNav: React.FC = () => {
       <nav.Screen name={ErrorInUseEffectAsyncProcess.ScreenName} component={ErrorInUseEffectAsyncProcess.Screen} />
       <nav.Screen name={ErrorInReactComponent.ScreenName} component={ErrorInReactComponent.Screen} />
       <nav.Screen name={ErrorInNativeModule.ScreenName} component={ErrorInNativeModule.Screen} />
+      <nav.Screen name={ErrorInWebView.ScreenName} component={ErrorInWebView.Screen} />
     </nav.Navigator>
   );
 };
