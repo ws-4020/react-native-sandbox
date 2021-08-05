@@ -21,46 +21,46 @@ const Screen = () => {
 
   return (
     <View style={styles.container}>
+      {httpError && (
+        <View style={styles.errorContainer}>
+          <Text>http error</Text>
+          <Text>{httpError.title}</Text>
+          <Text>{httpError.statusCode}</Text>
+          <Text>{httpError.description}</Text>
+        </View>
+      )}
+      {error && (
+        <View style={styles.errorContainer}>
+          <Text>error</Text>
+          <Text>{error.title}</Text>
+          <Text>{error.code}</Text>
+          <Text>{error.description}</Text>
+        </View>
+      )}
       <View style={styles.webviewContainer}>
-        {httpError ? (
-          <View>
-            <Text>http error</Text>
-            <Text>{httpError.title}</Text>
-            <Text>{httpError.statusCode}</Text>
-            <Text>{httpError.description}</Text>
-          </View>
-        ) : error ? (
-          <View>
-            <Text>error</Text>
-            <Text>{error.title}</Text>
-            <Text>{error.code}</Text>
-            <Text>{error.description}</Text>
-          </View>
-        ) : (
-          <WebView
-            source={{uri: `http://${host}:3000/${statusCode}`}}
-            onError={(event) => {
-              setHttpError(undefined);
-              setError(event.nativeEvent);
-              crashlytics().recordError(
-                new Error(
-                  `Error occurred in webview. code=[${event.nativeEvent.code}]. description=[${event.nativeEvent.description}]`,
-                ),
-                'WebViewError',
-              );
-            }}
-            onHttpError={(event) => {
-              setHttpError(event.nativeEvent);
-              setError(undefined);
-              crashlytics().recordError(
-                new Error(
-                  `HttpError occurred in webview. statusCode=[${event.nativeEvent.statusCode}]. description=[${event.nativeEvent.description}]`,
-                ),
-                'WebViewHttpError',
-              );
-            }}
-          />
-        )}
+        <WebView
+          source={{uri: `http://${host}:3000/${statusCode}`}}
+          onError={(event) => {
+            setHttpError(undefined);
+            setError(event.nativeEvent);
+            crashlytics().recordError(
+              new Error(
+                `Error occurred in webview. code=[${event.nativeEvent.code}]. description=[${event.nativeEvent.description}]`,
+              ),
+              'WebViewError',
+            );
+          }}
+          onHttpError={(event) => {
+            setHttpError(event.nativeEvent);
+            setError(undefined);
+            crashlytics().recordError(
+              new Error(
+                `HttpError occurred in webview. statusCode=[${event.nativeEvent.statusCode}]. description=[${event.nativeEvent.description}]`,
+              ),
+              'WebViewHttpError',
+            );
+          }}
+        />
       </View>
       <View style={styles.textInputContainer}>
         <Input
@@ -96,6 +96,9 @@ const Screen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  errorContainer: {
+    flex: 2,
   },
   webviewContainer: {
     flex: 6,
