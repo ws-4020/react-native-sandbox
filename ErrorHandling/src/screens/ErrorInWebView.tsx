@@ -6,14 +6,14 @@ import WebView from 'react-native-webview';
 import {WebViewError, WebViewHttpError} from 'react-native-webview/lib/WebViewTypes';
 
 const baseHost = Platform.select({
-  ios: 'localhost',
+  default: 'localhost',
   android: '10.0.2.2',
 });
 
 const ScreenName = 'ErrorInWebView';
 const Screen = () => {
   const [statusCode, setStatusCode] = useState<string>('200');
-  const [host, setHost] = useState<string>(baseHost ?? 'localhost');
+  const [host, setHost] = useState<string>(baseHost);
   const [statusCodeInputValue, setStatusCodeInputValue] = useState<string>();
   const [ipInputValue, setIpInputValue] = useState<string>();
   const [httpError, setHttpError] = useState<WebViewHttpError | undefined>(undefined);
@@ -84,7 +84,7 @@ const Screen = () => {
             setHttpError(undefined);
             setError(undefined);
             setStatusCode(statusCodeInputValue ?? '200');
-            setHost(ipInputValue ?? baseHost ?? 'localhost');
+            setHost(ipInputValue ?? baseHost);
           }}
           title="WebView再表示"
         />
