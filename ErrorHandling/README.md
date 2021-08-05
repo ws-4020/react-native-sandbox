@@ -57,11 +57,6 @@ npm run android -- --variant Release
 npm run ios -- --configuration Release
 ```
 
-WebViewでコンテンツを表示するために、HttpServerを起動します。
-```bash
-npm run http-server
-```
-
 実行後に表示されるページでエラーを発生させると、アプリがクラッシュしてエラーログがFirebase Crashlyticsに送信されます。（WebViewとHTTP API通信については、個別にエラーハンドリングしているのでクラッシュしません。）
 Firebase Crashlyticsにログが送信されるタイミングは、アプリがクラッシュした後に、再度アプリを起動した時になります。
 
@@ -73,6 +68,13 @@ iPhoneでアプリを実行するには、以下の手順が必要です。
 * Firebase Consoleで、Bundle Identifierに個人のサフィックスを追加してアプリを追加する
 * 追加したアプリでCrashlyticsを有効にする
 * `GoogleService-Info.plist`をダウンロードして、`ios`ディレクトリに格納する
+
+## WebViewで表示するコンテンツサーバの起動
+
+WebViewでコンテンツを表示するために、HttpServerを起動します。
+```bash
+npm run http-server
+```
 
 ## Firebase Crashlyticsのコンソールに表示されているスタックトレースとソースコードのマッピング
 
