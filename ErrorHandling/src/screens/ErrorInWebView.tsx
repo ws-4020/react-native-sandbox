@@ -16,8 +16,8 @@ const Screen = () => {
   const [host, setHost] = useState<string>(baseHost);
   const [statusCodeInputValue, setStatusCodeInputValue] = useState<string>();
   const [ipInputValue, setIpInputValue] = useState<string>();
-  const [httpError, setHttpError] = useState<WebViewHttpError | undefined>(undefined);
-  const [error, setError] = useState<WebViewError | undefined>(undefined);
+  const [httpError, setHttpError] = useState<WebViewHttpError>();
+  const [error, setError] = useState<WebViewError>();
 
   return (
     <View style={styles.container}>
