@@ -27,7 +27,7 @@ export const DeepLinkContextProvider: React.FC = ({children}) => {
       setLink(link);
       setEvent(event);
     } else {
-      setEvent(`unsafe link (${link.matchType ? link.matchType : 'no match type'})`);
+      setEvent(`unsafe link (${link.matchType ? link.matchType : 'no match type'}) in ${event}`);
     }
   };
 
