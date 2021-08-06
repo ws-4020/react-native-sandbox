@@ -1,11 +1,12 @@
 import dynamicLinks, {FirebaseDynamicLinksTypes} from '@react-native-firebase/dynamic-links';
 import React, {useCallback, useContext, useEffect, useState} from 'react';
-import {Linking, Platform} from 'react-native';
+import {Platform} from 'react-native';
 
 interface ContextValueType {
   link?: FirebaseDynamicLinksTypes.DynamicLink;
   event?: string;
   createLink: (key: string, value: string) => Promise<string>;
+  setShortLink: (url: string) => void;
 }
 
 export const DeepLinkContext = React.createContext<ContextValueType>({} as ContextValueType);
@@ -30,6 +31,15 @@ export const DeepLinkContextProvider: React.FC = ({children}) => {
     }
   };
 
+  const setShortLink = (shortLink: string) => {
+    dynamicLinks()
+      .resolveLink(shortLink)
+      .then((link) => {
+        setSafeLink(link, 'on App');
+      })
+      .catch(errorHandling);
+  };
+
   useEffect(() => {
     dynamicLinks()
       .getInitialLink()
@@ -37,31 +47,18 @@ export const DeepLinkContextProvider: React.FC = ({children}) => {
         setSafeLink(link, 'initialLink');
       })
       .catch(errorHandling);
-    // forground
     const unsubscribe = dynamicLinks().onLink((url) => {
       if (url) {
         setSafeLink(url, 'dynamic on link');
       }
     });
-    Linking.addEventListener('url', (url) => {
-      if (url) {
-        dynamicLinks()
-          .resolveLink(url.url)
-          .then((link) => {
-            setSafeLink(link, 'on url');
-          })
-          .catch(errorHandling);
-      }
-    });
-    return () => {
-      Linking.removeAllListeners('url');
-      unsubscribe();
-    };
+    return unsubscribe;
   }, [errorHandling]);
 
   const contextValue: ContextValueType = {
     link,
     event,
+    setShortLink,
     createLink: async (key, value) => {
       const encodedKey = encodeURI(key);
       const encodedValue = encodeURI(value);
