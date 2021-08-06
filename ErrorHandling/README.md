@@ -2,6 +2,8 @@
 
 React Nativeを使用したアプリのエラーハンドリングについて検証するプロジェクトです。
 
+## グローバルエラーハンドリング
+
 以下のケースにおいて、捕捉されていないエラーをハンドリングして、Firebase Crashlyticsにエラーログを送信できるかを検証しています。
 
 * React Componentで発生したエラー
@@ -28,6 +30,20 @@ React Nativeを使用したアプリのエラーハンドリングについて�
 
 上記方法で、エラーを捕捉できることを検証していますが、 現在コミットしているソースコードでは、独自でグローバルなエラーハンドリングを実施せず、全てFirebase Crashlytics側で処理する方法としています。
 ※ 上記方法の動作を確認したい場合は、必要に応じて該当箇所のコメントアウトを解除してください。
+
+## WebViewで発生するエラーのハンドリング
+
+以下のケースにおいて、エラーをハンドリングしてFirebase Crashlyticsにエラーログを送信できるかを検証しています。
+
+* WebViewで表示するページを取得する際に、ステータスコード400以上が返却される場合
+* ネットワークエラーなどによりWebViewで表示するページにアクセスできない場合
+
+React Native WebViewの`onError`、`onHttpError`属性を使用してエラーをハンドリングします。
+
+| 属性 | 捕捉できるエラー |
+|:----|:----|
+| onHttpError | WebViewで表示するページから、ステータスコード400以上が返却される場合 |
+| onError | ネットワークエラーなどによりWebViewで表示するページにアクセスできない場合 |
     
 ## アプリの実行
 
@@ -41,7 +57,7 @@ npm run android -- --variant Release
 npm run ios -- --configuration Release
 ```
 
-実行後に表示されるページで、エラーを発生させるとアプリがクラッシュしてエラーログがFirebase Crashlyticsに送信されます。
+実行後に表示されるページでエラーを発生させると、アプリがクラッシュしてエラーログがFirebase Crashlyticsに送信されます。（WebViewとHTTP API通信については、個別にエラーハンドリングしているのでクラッシュしません。）
 Firebase Crashlyticsにログが送信されるタイミングは、アプリがクラッシュした後に、再度アプリを起動した時になります。
 
 なお、ReleaseモードではなくDebugモードでもアプリは動作しますが、Debugモードではエラー時にReact NativeがLogBoxにエラーログを表示する影響で、Firebase Crashlyticsにはログが送信されません。
@@ -52,6 +68,13 @@ iPhoneでアプリを実行するには、以下の手順が必要です。
 * Firebase Consoleで、Bundle Identifierに個人のサフィックスを追加してアプリを追加する
 * 追加したアプリでCrashlyticsを有効にする
 * `GoogleService-Info.plist`をダウンロードして、`ios`ディレクトリに格納する
+
+## WebViewで表示するコンテンツサーバの起動
+
+WebViewでコンテンツを表示するために、HttpServerを起動します。
+```bash
+npm run http-server
+```
 
 ## Firebase Crashlyticsのコンソールに表示されているスタックトレースとソースコードのマッピング
 

@@ -8,6 +8,7 @@ import {ErrorInNativeModule} from './ErrorInNativeModules';
 import {ErrorInReactComponent} from './ErrorInReactComponent';
 import {ErrorInUseEffectAsyncProcess} from './ErrorInUseEffectAsyncProcess';
 import {ErrorInUseEffectSyncProcess} from './ErrorInUseEffectSyncProcess';
+import {ErrorInWebView} from './ErrorInWebView';
 
 const ScreenName = 'ErrorCase';
 const Screen = () => {
@@ -25,6 +26,7 @@ const Screen = () => {
       />
       <Button onPress={() => navigation.navigate(ErrorInReactComponent.ScreenName)} title="ReactComponentでエラー" />
       <Button onPress={() => navigation.navigate(ErrorInNativeModule.ScreenName)} title="Native Modulesでエラー" />
+      <Button onPress={() => navigation.navigate(ErrorInWebView.ScreenName)} title="WebViewでエラー" />
     </View>
   );
 };

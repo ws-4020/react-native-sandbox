@@ -18,7 +18,8 @@
     "bundle:android": "mkdirp ./generated && react-native bundle --dev false --sourcemap-output ./generated/index.android.bundle.map --entry-file index.js --bundle-output ./generated/index.android.bundle --platform android",
     "bundle:ios": "mkdirp ./generated && react-native bundle --dev false --sourcemap-output ./generated/index.ios.bundle.map --entry-file index.js --bundle-output ./generated/index.ios.bundle --platform ios",
     "symbolicate:android": "npx metro-symbolicate ./generated/index.android.bundle.map",
-    "symbolicate:ios": "npx metro-symbolicate ./generated/index.ios.bundle.map"
+    "symbolicate:ios": "npx metro-symbolicate ./generated/index.ios.bundle.map",
+    "http-server": "node .script/http-server.js"
   },
   "dependencies": {
     "@react-native-community/masked-view": "0.1.10",
@@ -40,7 +41,8 @@
     "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "~3.0.0",
     "react-native-unimodules": "~0.13.3",
-    "react-native-web": "~0.13.12"
+    "react-native-web": "~0.13.12",
+    "react-native-webview": "11.2.3"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
