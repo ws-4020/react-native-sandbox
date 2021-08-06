@@ -48,7 +48,7 @@ export const DeepLinkContextProvider: React.FC = ({children}) => {
         dynamicLinks()
           .resolveLink(url.url)
           .then((link) => {
-            setSafeLink(link, 'on link');
+            setSafeLink(link, 'on url');
           })
           .catch(errorHandling);
       }
