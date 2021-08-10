@@ -65,12 +65,12 @@
     if (_initialLinkUrl == nil) {
       _initialLinkUrl = dynamicLink.url.absoluteString;
       _initialLinkMinimumAppVersion = dynamicLink.minimumAppVersion;
-      _initialLinkMatchType = dynamicLink.matchType == nil ? [NSNull null] : [[self class] numberWithMatchType:dynamicLink.matchType];
+      _initialLinkMatchType = [[self class] numberWithMatchType:dynamicLink.matchType];
     }
     [[RNFBRCTEventEmitter shared] sendEventWithName:LINK_RECEIVED_EVENT body:@{
         @"url": dynamicLink.url.absoluteString,
         @"minimumAppVersion": dynamicLink.minimumAppVersion == nil ? [NSNull null] : dynamicLink.minimumAppVersion,
-        @"matchType": dynamicLink.matchType == nil ? [NSNull null] : [[self class] numberWithMatchType:dynamicLink.matchType],
+        @"matchType": [[self class] numberWithMatchType:dynamicLink.matchType],
     }];
   }
 
@@ -79,6 +79,9 @@
 }
 
 + (NSNumber *)numberWithMatchType:(FIRDLMatchType)matchType {
+  if (!matchType) {
+    return @0;
+  }
   switch (matchType) {
     case FIRDLMatchTypeNone:
       return @0;
@@ -106,7 +109,7 @@
       [[RNFBRCTEventEmitter shared] sendEventWithName:LINK_RECEIVED_EVENT body:@{
           @"url": dynamicLink.url.absoluteString,
           @"minimumAppVersion": dynamicLink.minimumAppVersion == nil ? [NSNull null] : dynamicLink.minimumAppVersion,
-          @"matchType": dynamicLink.matchType == nil ? [NSNull null] : [[self class] numberWithMatchType:dynamicLink.matchType],
+          @"matchType": [[self class] numberWithMatchType:dynamicLink.matchType],
       }];
     }
 

@@ -129,7 +129,7 @@ RCT_EXPORT_METHOD(getInitialLink:
       resolve(@{
           @"url": dynamicLink.url.absoluteString,
           @"minimumAppVersion": dynamicLink.minimumAppVersion == nil ? [NSNull null] : dynamicLink.minimumAppVersion,
-          @"matchType": dynamicLink.matchType == nil ? [NSNull null] : [[self class] numberWithMatchType:dynamicLink.matchType],
+          @"matchType": [[self class] numberWithMatchType:dynamicLink.matchType],
       });
     } else if ([RNFBDynamicLinksAppDelegateInterceptor sharedInstance].initialLinkUrl != nil) {
       resolve(@{
@@ -153,13 +153,13 @@ RCT_EXPORT_METHOD(getInitialLink:
         resolve(@{
             @"url": dynamicLink.url.absoluteString,
             @"minimumAppVersion": dynamicLink.minimumAppVersion == nil ? [NSNull null] : dynamicLink.minimumAppVersion,
-            @"matchType": dynamicLink.matchType == nil ? [NSNull null] : [[self class] numberWithMatchType:dynamicLink.matchType],
+            @"matchType": [[self class] numberWithMatchType:dynamicLink.matchType],
         });
       } else if (!error && [RNFBDynamicLinksAppDelegateInterceptor sharedInstance].initialLinkUrl != nil) {
         resolve(@{
             @"url": [RNFBDynamicLinksAppDelegateInterceptor sharedInstance].initialLinkUrl,
             @"minimumAppVersion": [RNFBDynamicLinksAppDelegateInterceptor sharedInstance].initialLinkMinimumAppVersion == nil ? [NSNull null] : [RNFBDynamicLinksAppDelegateInterceptor sharedInstance].initialLinkMinimumAppVersion,
-            @"matchType": [RNFBDynamicLinksAppDelegateInterceptor sharedInstance].initialLinkMatchType == nil ? [NSNull null] : [RNFBDynamicLinksAppDelegateInterceptor sharedInstance].initialLinkMatchType,
+            @"matchType": [RNFBDynamicLinksAppDelegateInterceptor sharedInstance].initialLinkMatchType,
         });
       } else if (error) {
         [RNFBSharedUtils rejectPromiseWithUserInfo:reject userInfo:(NSMutableDictionary *) @{
@@ -197,7 +197,7 @@ RCT_EXPORT_METHOD(resolveLink:
         resolve(@{
             @"url": dynamicLink.url.absoluteString,
             @"minimumAppVersion": dynamicLink.minimumAppVersion == nil ? [NSNull null] : dynamicLink.minimumAppVersion,
-            @"matchType": dynamicLink.matchType == nil ? [NSNull null] : [[self class] numberWithMatchType:dynamicLink.matchType],
+            @"matchType": [[self class] numberWithMatchType:dynamicLink.matchType],
         });
     } else if (!error || (error && [error.localizedDescription containsString:@"dynamicLinks error 404"])) {
       [RNFBSharedUtils rejectPromiseWithUserInfo:reject userInfo:(NSMutableDictionary *) @{
@@ -357,6 +357,9 @@ RCT_EXPORT_METHOD(resolveLink:
 }
 
 + (NSNumber *)numberWithMatchType:(FIRDLMatchType)matchType {
+  if (!matchType) {
+    return @0;
+  }
   switch (matchType) {
     case FIRDLMatchTypeNone:
       return @0;
