@@ -121,5 +121,5 @@ const timeout = (queryClient: QueryClient, queryKey: QueryKey) => {
       .catch((reason) => {
         console.log(reason);
       });
-  }, 5000);
+  }, 60000);
 };
