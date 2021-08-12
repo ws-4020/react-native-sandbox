@@ -110,6 +110,7 @@ const _retry = (failureCount: number, error: AxiosError<ErrorResponse>) => {
       return false;
     }
   }
+  // デフォルトのリトライ回数は3回。1回目と2回目の場合は再度HTTPアクセスを実施
   return failureCount !== 2;
 };
 
