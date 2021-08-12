@@ -40,6 +40,9 @@ const Screen = () => {
     if (error?.response?.status === 400) {
       Alert.alert('Getリクエストで業務エラーが発生しました。');
     }
+    if (error?.response?.status === 404) {
+      Alert.alert('リソースが見つかりません。');
+    }
   }, [error]);
   useEffect(() => {
     if (isRefetching) {
