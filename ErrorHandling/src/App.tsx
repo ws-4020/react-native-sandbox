@@ -3,7 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {RootStackNav} from 'navigation';
 import React from 'react';
 import {NativeModules} from 'react-native';
-import {QueryClient, QueryClientProvider} from 'react-query';
+import {QueryClient, QueryClientProvider, setLogger} from 'react-query';
 
 // import {ErrorBoundary} from './components/ErrorBoundary';
 const {ExceptionHandlerModule} = NativeModules;
@@ -29,6 +29,22 @@ const {ExceptionHandlerModule} = NativeModules;
 crashlytics().setUserId('testUser');
 // React Queryの初期化
 const queryClient = new QueryClient();
+
+// ステータスコードが400以上の場合や、ネットワークエラーの場合は全てerrorになる。
+// ステータスコードによってFirebase Crashlyticsに送るか分岐するならば、共通エラー処理側でやればいいのでsetLoggerは使用しない
+// if (!__DEV__) {
+//   setLogger({
+//     log: (message) => {
+//       console.log(message);
+//     },
+//     warn: (message) => {
+//       console.warn(message);
+//     },
+//     error: (error) => {
+//       crashlytics().recordError(error, 'HttpApiError');
+//     },
+//   });
+// }
 
 // TODO 初期処理でユーザIDを設定
 

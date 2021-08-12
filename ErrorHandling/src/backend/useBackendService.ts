@@ -1,3 +1,4 @@
+import crashlytics from '@react-native-firebase/crashlytics';
 import axios, {AxiosError} from 'axios';
 import {Alert} from 'react-native';
 import {
@@ -86,6 +87,7 @@ const _onError = (error: AxiosError<ErrorResponse>) => {
     } else if (error.response?.status === 503) {
       Alert.alert('システムメンテナンス中です。');
     } else {
+      crashlytics().recordError(error, 'HttpApiSystemError');
       Alert.alert('予期しない例外が発生しました。');
     }
   } else {
@@ -116,10 +118,11 @@ const timeout = (queryClient: QueryClient, queryKey: QueryKey) => {
     queryClient
       .cancelQueries(queryKey)
       .then(() => {
+        crashlytics().recordError(new Error('Http api connection timed out.'), 'HttpApiTimeout');
         Alert.alert('接続がタイムアウトしました。');
       })
       .catch((reason) => {
-        console.log(reason);
+        crashlytics().recordError(new Error(reason), 'HttpApiCancelError');
       });
   }, 60000);
 };
