@@ -22,6 +22,7 @@ const baseHost = Platform.select({
 const Screen = () => {
   const [queryStatusCode, setQueryStatusCode] = useState<string>('200');
   const [mutationStatusCode, setMutationStatusCode] = useState<string>('200');
+  const [isRefetching, setIsRefetching] = useState<boolean>(false);
   const [isMutating, setIsMutating] = useState<boolean>(false);
   const [host, setHost] = useState<string>(baseHost);
   const [queryStatusCodeInputValue, setQueryStatusCodeInputValue] = useState<string>();
@@ -40,6 +41,13 @@ const Screen = () => {
       Alert.alert('Getリクエストで業務エラーが発生しました。');
     }
   }, [error]);
+  useEffect(() => {
+    if (isRefetching) {
+      setIsRefetching(false);
+      // eslint-disable-next-line no-void
+      void refetch();
+    }
+  }, [mutation, isMutating]);
   useEffect(() => {
     if (isMutating) {
       setIsMutating(false);
@@ -97,10 +105,10 @@ const Screen = () => {
         <Button
           style={styles.button}
           title="Getリクエスト"
-          onPress={async () => {
+          onPress={() => {
             setQueryStatusCode(queryStatusCodeInputValue ?? '200');
             setHost(ipInputValue ?? baseHost);
-            await refetch();
+            setIsRefetching(true);
           }}
         />
         <Button
