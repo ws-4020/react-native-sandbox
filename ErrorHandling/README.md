@@ -44,6 +44,15 @@ React Native WebViewの`onError`、`onHttpError`属性を使用してエラー�
 |:----|:----|
 | onHttpError | WebViewで表示するページから、ステータスコード400以上が返却される場合 |
 | onError | ネットワークエラーなどによりWebViewで表示するページにアクセスできない場合 |
+
+## HTTP APIで発生するエラーのハンドリング
+
+React Queryとaxiosを使用してHTTP APIにアクセスした場合に、共通でエラーハンドリングできるかを検証しています。
+
+* HTTP APIから400以上のステータスコードが返却された場合
+* ネットワークエラーなどによりHTTP APIにアクセスできない場合
+
+また、1分以上HTTP APIから応答がない場合は、強制的に通信をキャンセルする方法についても検証しています。
     
 ## アプリの実行
 
@@ -69,9 +78,9 @@ iPhoneでアプリを実行するには、以下の手順が必要です。
 * 追加したアプリでCrashlyticsを有効にする
 * `GoogleService-Info.plist`をダウンロードして、`ios`ディレクトリに格納する
 
-## WebViewで表示するコンテンツサーバの起動
+## HTTP API、WebViewからアクセスするHTTPサーバの起動
 
-WebViewでコンテンツを表示するために、HttpServerを起動します。
+HTTP API、WebViewからアクセスするHttpサーバを起動します。
 ```bash
 npm run http-server
 ```
