@@ -20,11 +20,17 @@ http
         `<html lang="ja"><meta charset="utf-8"/><body>ステータスコードは${statusCode}です。<br><img src="http://localhost:3021" alt="img1"><img src="http://localhost:3000/400" alt="img2"></body></html>`,
       );
     } else {
+      const method = req.method;
       if (400 <= statusCode) {
-        res.end(`{"errorCode": ${statusCode}, "message": "Error has occurred."}`);
+        res.end(`{"code": ${statusCode}, "message": "Error has occurred. method=[${method}]"}`);
         return;
       }
-      res.end('{"message": "success"}');
+      res.end(`{"message": "success. status=[${statusCode}] method=[${method}]"}`);
     }
+  })
+  .on('connection', function (socket) {
+    socket.on('data', function (chunk) {
+      console.log(chunk.toString());
+    });
   })
   .listen(3000, () => console.log('Server http://localhost:3000'));

@@ -4,6 +4,7 @@ import {StyleSheet, View} from 'react-native';
 import {Button} from 'react-native-elements';
 
 import {ErrorInEventHandler} from './ErrorInEventHandler';
+import {ErrorInHttpApi} from './ErrorInHttpApi';
 import {ErrorInNativeModule} from './ErrorInNativeModules';
 import {ErrorInReactComponent} from './ErrorInReactComponent';
 import {ErrorInUseEffectAsyncProcess} from './ErrorInUseEffectAsyncProcess';
@@ -27,6 +28,7 @@ const Screen = () => {
       <Button onPress={() => navigation.navigate(ErrorInReactComponent.ScreenName)} title="ReactComponentでエラー" />
       <Button onPress={() => navigation.navigate(ErrorInNativeModule.ScreenName)} title="Native Modulesでエラー" />
       <Button onPress={() => navigation.navigate(ErrorInWebView.ScreenName)} title="WebViewでエラー" />
+      <Button onPress={() => navigation.navigate(ErrorInHttpApi.ScreenName)} title="HTTP APIでエラー" />
     </View>
   );
 };
