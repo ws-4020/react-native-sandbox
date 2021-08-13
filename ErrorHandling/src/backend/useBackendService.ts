@@ -91,7 +91,7 @@ const _onError = (error: AxiosError<ErrorResponse>) => {
       Alert.alert('予期しない例外が発生しました。');
     }
   } else {
-    Alert.alert('端末のネットワークを確認してください。');
+    Alert.alert('端末のネットワークを確認するか、しばらくしてから再度お試しください。');
   }
 };
 
