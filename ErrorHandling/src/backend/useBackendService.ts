@@ -93,9 +93,6 @@ const onError = (error: AxiosError<ErrorResponse>) => {
 const shouldRetry = (failureCount: number, error: AxiosError<ErrorResponse>) => {
   if (error.response?.status) {
     const status = error.response.status;
-    if (status >= 300 && status < 400) {
-      return false;
-    }
     if (status === 400 || status === 404 || status === 412) {
       return false;
     }

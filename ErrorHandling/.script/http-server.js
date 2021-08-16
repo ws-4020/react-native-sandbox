@@ -14,13 +14,22 @@ http
     //   }, 1200000);
     // });
 
-    res.writeHead(statusCode, {'Content-Type': 'text/html'});
     if (type === 'webview') {
+      let headers = {'Content-Type': 'text/html'};
+      if (statusCode >= 300 && statusCode < 400) {
+        headers = {...headers, Location: '/webview/200'};
+      }
+      res.writeHead(statusCode, headers);
       res.end(
         `<html lang="ja"><meta charset="utf-8"/><body>ステータスコードは${statusCode}です。<br><img src="http://localhost:3021" alt="img1"><img src="http://localhost:3000/400" alt="img2"></body></html>`,
       );
     } else {
       const method = req.method;
+      let headers = {'Content-Type': 'application/json'};
+      if (statusCode >= 300 && statusCode < 400) {
+        headers = {...headers, Location: '/api/200'};
+      }
+      res.writeHead(statusCode, headers);
       if (400 <= statusCode) {
         res.end(`{"code": ${statusCode}, "message": "Error has occurred. method=[${method}]"}`);
         return;
