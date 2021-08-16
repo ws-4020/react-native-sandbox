@@ -28,22 +28,31 @@ const Screen = () => {
   const [queryStatusCodeInputValue, setQueryStatusCodeInputValue] = useState<string>();
   const [mutationStatusCodeInputValue, setMutationStatusCodeInputValue] = useState<string>();
   const [ipInputValue, setIpInputValue] = useState<string>();
-  const {isLoading, data, error, isError, isFetching, refetch} = useBackendQuery<Result, string[]>(
-    ['test', queryStatusCode, host],
-    (queryKey) => {
-      const [_key, statusCode, host] = queryKey;
-      return `http://${host}:3000/api/${statusCode}`;
-    },
-  );
+  const {
+    isLoading,
+    data,
+    error: queryError,
+    isError,
+    isFetching,
+    refetch,
+  } = useBackendQuery<Result, string[]>(['test', queryStatusCode, host], (queryKey) => {
+    const [_key, statusCode, host] = queryKey;
+    return `http://${host}:3000/api/${statusCode}`;
+  });
   const mutation = useBackendMutation<Result, Body>(`http://${host}:3000/api/${mutationStatusCode}`);
   useEffect(() => {
-    if (error?.response?.status === 400) {
+    if (queryError?.response?.status === 400) {
       Alert.alert('Getリクエストで業務エラーが発生しました。');
     }
-    if (error?.response?.status === 404) {
+    if (queryError?.response?.status === 404) {
       Alert.alert('リソースが見つかりません。');
     }
-  }, [error]);
+  }, [queryError]);
+  useEffect(() => {
+    if (mutation.error?.response?.status === 400) {
+      Alert.alert('Postリクエストで業務エラーが発生しました。');
+    }
+  }, [mutation.error]);
   useEffect(() => {
     if (isRefetching) {
       setIsRefetching(false);
@@ -54,14 +63,7 @@ const Screen = () => {
   useEffect(() => {
     if (isMutating) {
       setIsMutating(false);
-      mutation.mutate(
-        {test: 'body test.'},
-        {
-          onError: (error) => {
-            if (error.response?.status === 400) Alert.alert('Postリクエストで業務エラーが発生しました。');
-          },
-        },
-      );
+      mutation.mutate({test: 'body test.'});
     }
   }, [mutation, isMutating]);
 
@@ -71,7 +73,7 @@ const Screen = () => {
         <Text>useQueryの結果領域</Text>
         {isLoading && <Text>Loading...</Text>}
         {isFetching && <Text>Fetching...</Text>}
-        {isError && <Text>Error...{error?.response?.status}</Text>}
+        {isError && <Text>Error...{queryError?.response?.status}</Text>}
         {data && <Text>{data.message}</Text>}
       </View>
       <View style={styles.mutationContainer}>
