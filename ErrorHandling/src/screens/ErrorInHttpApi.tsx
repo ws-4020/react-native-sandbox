@@ -50,7 +50,7 @@ const Screen = () => {
       // eslint-disable-next-line no-void
       void refetch();
     }
-  }, [mutation, isMutating]);
+  }, [refetch, isRefetching]);
   useEffect(() => {
     if (isMutating) {
       setIsMutating(false);
