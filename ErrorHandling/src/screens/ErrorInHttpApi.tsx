@@ -28,26 +28,19 @@ const Screen = () => {
   const [queryStatusCodeInputValue, setQueryStatusCodeInputValue] = useState<string>();
   const [mutationStatusCodeInputValue, setMutationStatusCodeInputValue] = useState<string>();
   const [ipInputValue, setIpInputValue] = useState<string>();
-  const {
-    isLoading,
-    data,
-    error: queryError,
-    isError,
-    isFetching,
-    refetch,
-  } = useBackendQuery<Result, string[]>(['test', queryStatusCode, host], (queryKey) => {
+  const query = useBackendQuery<Result, string[]>(['test', queryStatusCode, host], (queryKey) => {
     const [_key, statusCode, host] = queryKey;
     return `http://${host}:3000/api/${statusCode}`;
   });
   const mutation = useBackendMutation<Result, Body>(`http://${host}:3000/api/${mutationStatusCode}`);
   useEffect(() => {
-    if (queryError?.response?.status === 400) {
+    if (query.error?.response?.status === 400) {
       Alert.alert('Getリクエストで業務エラーが発生しました。');
     }
-    if (queryError?.response?.status === 404) {
+    if (query.error?.response?.status === 404) {
       Alert.alert('リソースが見つかりません。');
     }
-  }, [queryError]);
+  }, [query.error]);
   useEffect(() => {
     if (mutation.error?.response?.status === 400) {
       Alert.alert('Postリクエストで業務エラーが発生しました。');
@@ -57,9 +50,9 @@ const Screen = () => {
     if (isRefetching) {
       setIsRefetching(false);
       // eslint-disable-next-line no-void
-      void refetch();
+      void query.refetch();
     }
-  }, [refetch, isRefetching]);
+  }, [query.refetch, isRefetching]);
   useEffect(() => {
     if (isMutating) {
       setIsMutating(false);
@@ -71,10 +64,10 @@ const Screen = () => {
     <View style={styles.container}>
       <View style={styles.queryContainer}>
         <Text>useQueryの結果領域</Text>
-        {isLoading && <Text>Loading...</Text>}
-        {isFetching && <Text>Fetching...</Text>}
-        {isError && <Text>Error...{queryError?.response?.status}</Text>}
-        {data && <Text>{data.message}</Text>}
+        {query.isLoading && <Text>Loading...</Text>}
+        {query.isFetching && <Text>Fetching...</Text>}
+        {query.isError && <Text>Error...{query.error?.response?.status}</Text>}
+        {query.data && <Text>{query.data.message}</Text>}
       </View>
       <View style={styles.mutationContainer}>
         <Text>useMutationの結果領域</Text>
