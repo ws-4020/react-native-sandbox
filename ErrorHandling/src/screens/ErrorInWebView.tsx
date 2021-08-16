@@ -39,7 +39,7 @@ const Screen = () => {
       )}
       <View style={styles.webviewContainer}>
         <WebView
-          source={{uri: `http://${host}:3000/webview/${statusCode}`}}
+          source={{uri: `http://${host}:3100/webview/${statusCode}`}}
           onError={(event) => {
             setHttpError(undefined);
             setError(event.nativeEvent);

@@ -30,9 +30,9 @@ const Screen = () => {
   const [ipInputValue, setIpInputValue] = useState<string>();
   const query = useBackendQuery<Result, string[]>(['test', queryStatusCode, host], (queryKey) => {
     const [_key, statusCode, host] = queryKey;
-    return `http://${host}:3000/api/${statusCode}`;
+    return `http://${host}:3100/api/${statusCode}`;
   });
-  const mutation = useBackendMutation<Result, Body>(`http://${host}:3000/api/${mutationStatusCode}`);
+  const mutation = useBackendMutation<Result, Body>(`http://${host}:3100/api/${mutationStatusCode}`);
   useEffect(() => {
     if (query.error?.response?.status === 400) {
       Alert.alert('Getリクエストで業務エラーが発生しました。');

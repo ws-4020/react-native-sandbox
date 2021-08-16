@@ -7,7 +7,7 @@ const baseHost = Platform.select({
 });
 
 const defaultConfig: AxiosRequestConfig = {
-  baseURL: `http://${baseHost}:3000`,
+  baseURL: `http://${baseHost}:3001`,
 };
 
 export class HttpApiClient {
