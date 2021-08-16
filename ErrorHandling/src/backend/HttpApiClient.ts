@@ -1,4 +1,4 @@
-import axios, {AxiosInstance, AxiosPromise, CancelToken} from 'axios';
+import axios, {AxiosPromise, CancelToken} from 'axios';
 import {Platform} from 'react-native';
 
 const baseHost = Platform.select({
@@ -11,10 +11,8 @@ const defaultInstance = axios.create({
 });
 
 export class HttpApiClient {
-  private readonly client: AxiosInstance;
-  constructor(client?: AxiosInstance) {
-    this.client = client ?? defaultInstance;
-  }
+  constructor(private readonly client = defaultInstance) {}
+
   get<T>(path: string, token?: CancelToken): AxiosPromise<T> {
     return this.client.get<T>(path, {
       cancelToken: token,
