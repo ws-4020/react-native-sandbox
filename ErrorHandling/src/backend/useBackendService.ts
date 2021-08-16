@@ -1,5 +1,5 @@
 import crashlytics from '@react-native-firebase/crashlytics';
-import axios, {AxiosError} from 'axios';
+import {AxiosError} from 'axios';
 import {Alert} from 'react-native';
 import {
   EnsuredQueryKey,
@@ -17,7 +17,7 @@ import {
 import {HttpApiClient} from './HttpApiClient';
 
 // 画面の入力値によってbaseURLを変えるので、baseURLを設定しないaxiosのインスタンスでHTTP APIクライアントを作成
-const httpApiClient = new HttpApiClient(axios.create());
+const httpApiClient = new HttpApiClient({});
 
 export type ErrorResponse = {
   code: string;

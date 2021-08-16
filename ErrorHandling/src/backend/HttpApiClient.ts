@@ -1,4 +1,4 @@
-import axios, {AxiosPromise, CancelToken, Method} from 'axios';
+import axios, {AxiosPromise, AxiosRequestConfig, Method} from 'axios';
 import {Platform} from 'react-native';
 
 const baseHost = Platform.select({
@@ -6,25 +6,25 @@ const baseHost = Platform.select({
   android: '10.0.2.2',
 });
 
-const defaultInstance = axios.create({
+const defaultConfig: AxiosRequestConfig = {
   baseURL: `http://${baseHost}:3000`,
-});
+};
 
 export class HttpApiClient {
-  constructor(private readonly client = defaultInstance) {}
+  constructor(private readonly client = defaultConfig) {}
 
   get<T>(path: string): CancelableAxiosPromise<T> {
     return this.requestWithCancellation(path, 'GET');
   }
 
-  post<T>(path: string, data?: any, token?: CancelToken): AxiosPromise<T> {
+  post<T>(path: string, data?: any): AxiosPromise<T> {
     return this.requestWithCancellation(path, 'POST', data);
   }
 
   requestWithCancellation<T>(url: string, method: Method, data?: unknown) {
     const CancelToken = axios.CancelToken;
     const source = CancelToken.source();
-    const promise = axios.request({url, method, data, cancelToken: source.token});
+    const promise = axios.request({...defaultConfig, url, method, data, cancelToken: source.token});
     // React Queryでは、promise.cancelを使用して通信をキャンセルする
     // https://react-query.tanstack.com/guides/query-cancellation
     // @ts-ignore
