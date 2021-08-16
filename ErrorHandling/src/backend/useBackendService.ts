@@ -43,7 +43,8 @@ export const useBackendQuery = <TData = unknown, TQueryKey extends QueryKey = Qu
     },
     {
       onError,
-      retry: shouldRetry,
+      // リトライはしない
+      // retry: shouldRetry,
       ...options,
     },
   );
@@ -60,7 +61,8 @@ export const useBackendMutation = <TData = unknown, TVariables = void, TContext 
     },
     {
       onError,
-      retry: shouldRetry,
+      // リトライはしない
+      // retry: shouldRetry,
       ...options,
     },
   );

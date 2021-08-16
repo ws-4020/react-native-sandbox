@@ -28,7 +28,12 @@ const {ExceptionHandlerModule} = NativeModules;
 // Firebase Crashlyticsの初期化
 crashlytics().setUserId('testUser');
 // React Queryの初期化
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {retry: false},
+    mutations: {retry: false},
+  },
+});
 
 // ステータスコードが400以上の場合や、ネットワークエラーの場合は全てerrorになる。
 // ステータスコードによってFirebase Crashlyticsに送るか分岐するならば、共通エラー処理側でやればいいのでsetLoggerは使用しない
