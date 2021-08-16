@@ -111,7 +111,7 @@ const _retry = (failureCount: number, error: AxiosError<ErrorResponse>) => {
     }
   }
   // デフォルトのリトライ回数は3回。1回目と2回目の場合は再度HTTPアクセスを実施
-  return failureCount !== 2;
+  return failureCount < 3;
 };
 
 const timeout = (queryClient: QueryClient, queryKey: QueryKey) => {
