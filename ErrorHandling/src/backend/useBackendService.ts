@@ -42,7 +42,7 @@ export const useBackendQuery = <TData = unknown, TQueryKey extends QueryKey = Qu
       }
     },
     {
-      onError: (err) => onError(err),
+      onError,
       retry: shouldRetry,
       ...options,
     },
@@ -59,7 +59,7 @@ export const useBackendMutation = <TData = unknown, TVariables = void, TContext 
       return response.data;
     },
     {
-      onError: (err) => onError(err),
+      onError,
       retry: shouldRetry,
       ...options,
     },
