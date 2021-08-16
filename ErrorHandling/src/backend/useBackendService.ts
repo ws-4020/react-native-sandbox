@@ -71,9 +71,11 @@ const onError = (error: AxiosError<ErrorResponse>) => {
     const status = error.response.status;
     if (status === 400) {
       // 何もしない
-    } else if (status === 401) {
-      // TODO 未認証とみなして、ログイン画面などに遷移
-    } else if (status === 404) {
+    }
+    // else if (status === 401) {
+    // ログイン時に、認証情報が不正の場合に401は発生する可能性があるが、それはログイン画面でハンドリングする
+    // }
+    else if (status === 404) {
       // 何もしない
     } else if (status === 412) {
       Alert.alert('アプリを新しいバージョンにアップデートしてください。');
@@ -93,17 +95,10 @@ const onError = (error: AxiosError<ErrorResponse>) => {
 const shouldRetry = (failureCount: number, error: AxiosError<ErrorResponse>) => {
   if (error.response?.status) {
     const status = error.response.status;
-    if (status === 400 || status === 404 || status === 412) {
+    if (status === 400 || status === 401 || status === 404 || status === 412) {
+      // 期限切れのIDトークンやアクセストークンは、HTTP APIリクエスト時に再取得するため401エラーは基本的に発生しない想定
+      // ログイン時に、認証情報が不正の場合に401は発生する可能性があるが、それはログイン画面でハンドリングするので、ここではリトライしない
       return false;
-    }
-    if (error.response?.status === 401) {
-      // 401の場合はリトライ回数を、3回（デフォルトのリトライ回数） + 1回（トークンの再取得してからリトライ）とする
-      if (failureCount >= 3) {
-        // TODO 未認証とみなして、ログイン画面などに遷移
-        return false;
-      }
-      // TODO IDトークンやアクセストークンの期限が切れた場合に、リフレッシュトークンを使用してトークンの再取得を実施
-      return true;
     }
   }
   // デフォルトのリトライ回数は3回。1回目と2回目の場合は再度HTTPアクセスを実施

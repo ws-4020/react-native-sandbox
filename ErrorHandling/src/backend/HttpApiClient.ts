@@ -10,6 +10,11 @@ const defaultConfig: AxiosRequestConfig = {
   baseURL: `http://${baseHost}:3001`,
 };
 
+axios.interceptors.request.use(async (config) => {
+  // TODO IDトークンやアクセストークンを設定
+  return config;
+});
+
 export class HttpApiClient {
   constructor(private readonly client = defaultConfig) {}
 
