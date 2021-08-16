@@ -33,13 +33,7 @@ export const useBackendQuery = <TData = unknown, TQueryKey extends QueryKey = Qu
   return useQuery<TData, AxiosError<ErrorResponse>, TData, TQueryKey>(
     queryKey,
     async (context) => {
-      const CancelToken = axios.CancelToken;
-      const source = CancelToken.source();
-      const promise = httpApiClient.get<TData>(pathFn(context.queryKey), source.token);
-      // @ts-ignore
-      promise.cancel = () => {
-        source.cancel('Query was cancelled by React Query');
-      };
+      const promise = httpApiClient.get<TData>(pathFn(context.queryKey));
       const timeoutObj = timeout(queryClient, queryKey);
       try {
         return (await promise).data;
