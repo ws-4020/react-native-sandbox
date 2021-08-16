@@ -68,17 +68,18 @@ export const useBackendMutation = <TData = unknown, TVariables = void, TContext 
 
 const _onError = (error: AxiosError<ErrorResponse>) => {
   if (error.response?.status) {
-    if (error.response?.status === 400) {
+    const status = error.response.status;
+    if (status === 400) {
       // 何もしない
-    } else if (error.response?.status === 401) {
+    } else if (status === 401) {
       // TODO 未認証とみなして、ログイン画面などに遷移
-    } else if (error.response?.status === 404) {
+    } else if (status === 404) {
       // 何もしない
-    } else if (error.response?.status === 412) {
+    } else if (status === 412) {
       Alert.alert('アプリを新しいバージョンにアップデートしてください。');
-    } else if (error.response?.status === 429) {
+    } else if (status === 429) {
       Alert.alert('只今混み合っています。しばらくしてから再度お試しください。');
-    } else if (error.response?.status === 503) {
+    } else if (status === 503) {
       Alert.alert('システムメンテナンス中です。');
     } else {
       crashlytics().recordError(error, 'HttpApiSystemError');
@@ -91,7 +92,7 @@ const _onError = (error: AxiosError<ErrorResponse>) => {
 
 const shouldRetry = (failureCount: number, error: AxiosError<ErrorResponse>) => {
   if (error.response?.status) {
-    const status = error.response?.status;
+    const status = error.response.status;
     if (status === 400 || status === 404 || status === 412) {
       return false;
     }
