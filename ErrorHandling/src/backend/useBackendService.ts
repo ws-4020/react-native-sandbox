@@ -43,7 +43,7 @@ export const useBackendQuery = <TData = unknown, TQueryKey extends QueryKey = Qu
     },
     {
       onError: (err) => _onError(err),
-      retry: _retry,
+      retry: shouldRetry,
       ...options,
     },
   );
@@ -60,7 +60,7 @@ export const useBackendMutation = <TData = unknown, TVariables = void, TContext 
     },
     {
       onError: (err) => _onError(err),
-      retry: _retry,
+      retry: shouldRetry,
       ...options,
     },
   );
@@ -89,19 +89,20 @@ const _onError = (error: AxiosError<ErrorResponse>) => {
   }
 };
 
-const _retry = (failureCount: number, error: AxiosError<ErrorResponse>) => {
+const shouldRetry = (failureCount: number, error: AxiosError<ErrorResponse>) => {
   if (error.response?.status) {
     const status = error.response?.status;
     if (status === 400 || status === 404 || status === 412) {
       return false;
     }
     if (error.response?.status === 401) {
-      if (failureCount === 0) {
-        // TODO IDトークンやアクセストークンの期限が切れた場合に、リフレッシュトークンを使用してトークンの再取得を実施
-        return true;
+      // 401の場合はリトライ回数を、3回（デフォルトのリトライ回数） + 1回（トークンの再取得してからリトライ）とする
+      if (failureCount >= 3) {
+        // TODO 未認証とみなして、ログイン画面などに遷移
+        return false;
       }
-      // TODO 未認証とみなして、ログイン画面などに遷移
-      return false;
+      // TODO IDトークンやアクセストークンの期限が切れた場合に、リフレッシュトークンを使用してトークンの再取得を実施
+      return true;
     }
   }
   // デフォルトのリトライ回数は3回。1回目と2回目の場合は再度HTTPアクセスを実施
