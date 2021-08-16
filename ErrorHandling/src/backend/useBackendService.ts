@@ -42,7 +42,7 @@ export const useBackendQuery = <TData = unknown, TQueryKey extends QueryKey = Qu
       }
     },
     {
-      onError: (err) => _onError(err),
+      onError: (err) => onError(err),
       retry: shouldRetry,
       ...options,
     },
@@ -59,14 +59,14 @@ export const useBackendMutation = <TData = unknown, TVariables = void, TContext 
       return response.data;
     },
     {
-      onError: (err) => _onError(err),
+      onError: (err) => onError(err),
       retry: shouldRetry,
       ...options,
     },
   );
 };
 
-const _onError = (error: AxiosError<ErrorResponse>) => {
+const onError = (error: AxiosError<ErrorResponse>) => {
   if (error.response?.status) {
     const status = error.response.status;
     if (status === 400) {
