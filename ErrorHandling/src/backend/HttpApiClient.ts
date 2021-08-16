@@ -21,11 +21,9 @@ export class HttpApiClient {
     return this.requestWithCancellation(path, 'POST', data);
   }
 
-  requestWithCancellation<T>(url: string, method: Method, data?: any) {
+  requestWithCancellation<T>(url: string, method: Method, data?: unknown) {
     const CancelToken = axios.CancelToken;
     const source = CancelToken.source();
-    // dataはどんな型でくるかわからないので、any型とする
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const promise = axios.request({url, method, data, cancelToken: source.token});
     // React Queryでは、promise.cancelを使用して通信をキャンセルする
     // https://react-query.tanstack.com/guides/query-cancellation
