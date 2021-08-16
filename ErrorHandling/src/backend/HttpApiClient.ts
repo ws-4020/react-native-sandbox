@@ -7,7 +7,7 @@ const baseHost = Platform.select({
 });
 
 const defaultConfig: AxiosRequestConfig = {
-  baseURL: `http://${baseHost}:3001`,
+  baseURL: `http://${baseHost}:3100`,
 };
 
 axios.interceptors.request.use(async (config) => {
