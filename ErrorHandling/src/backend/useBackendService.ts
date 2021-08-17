@@ -73,11 +73,9 @@ const onError = (error: AxiosError<ErrorResponse>) => {
     const status = error.response.status;
     if (status === 400) {
       // 何もしない
-    }
-    // else if (status === 401) {
-    // ログイン時に、認証情報が不正の場合に401は発生する可能性があるが、それはログイン画面でハンドリングする
-    // }
-    else if (status === 404) {
+    } else if (status === 401) {
+      // ログイン時に、認証情報が不正の場合に401は発生する可能性があるが、それはログイン画面でハンドリングする
+    } else if (status === 404) {
       // 何もしない
     } else if (status === 412) {
       Alert.alert('アプリを新しいバージョンにアップデートしてください。');
@@ -94,18 +92,20 @@ const onError = (error: AxiosError<ErrorResponse>) => {
   }
 };
 
-const shouldRetry = (failureCount: number, error: AxiosError<ErrorResponse>) => {
-  if (error.response?.status) {
-    const status = error.response.status;
-    if (status === 400 || status === 401 || status === 404 || status === 412) {
-      // 期限切れのIDトークンやアクセストークンは、HTTP APIリクエスト時に再取得するため401エラーは基本的に発生しない想定
-      // ログイン時に、認証情報が不正の場合に401は発生する可能性があるが、それはログイン画面でハンドリングするので、ここではリトライしない
-      return false;
-    }
-  }
-  // デフォルトのリトライ回数は3回。1回目と2回目の場合は再度HTTPアクセスを実施
-  return failureCount < 3;
-};
+// 共通処理ではリトライしない
+// 画面操作で、リトライできるようなUIを提供する
+// const shouldRetry = (failureCount: number, error: AxiosError<ErrorResponse>) => {
+//   if (error.response?.status) {
+//     const status = error.response.status;
+//     if (status === 400 || status === 401 || status === 404 || status === 412) {
+//       // 期限切れのIDトークンやアクセストークンは、HTTP APIリクエスト時に再取得するため401エラーは基本的に発生しない想定
+//       // ログイン時に、認証情報が不正の場合に401は発生する可能性があるが、それはログイン画面でハンドリングするので、ここではリトライしない
+//       return false;
+//     }
+//   }
+//   // デフォルトのリトライ回数は3回。1回目と2回目の場合は再度HTTPアクセスを実施
+//   return failureCount < 3;
+// };
 
 const timeout = (queryClient: QueryClient, queryKey: QueryKey) => {
   return setTimeout(() => {
