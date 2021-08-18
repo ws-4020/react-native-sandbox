@@ -8,6 +8,7 @@ import {
   ErrorInReactComponent,
   ErrorInUseEffectSyncProcess,
 } from '../screens';
+import {ErrorInHttpApi} from '../screens/ErrorInHttpApi';
 import {ErrorInUseEffectAsyncProcess} from '../screens/ErrorInUseEffectAsyncProcess';
 import {ErrorInWebView} from '../screens/ErrorInWebView';
 
@@ -22,6 +23,7 @@ export const RootStackNav: React.FC = () => {
       <nav.Screen name={ErrorInReactComponent.ScreenName} component={ErrorInReactComponent.Screen} />
       <nav.Screen name={ErrorInNativeModule.ScreenName} component={ErrorInNativeModule.Screen} />
       <nav.Screen name={ErrorInWebView.ScreenName} component={ErrorInWebView.Screen} />
+      <nav.Screen name={ErrorInHttpApi.ScreenName} component={ErrorInHttpApi.Screen} />
     </nav.Navigator>
   );
 };

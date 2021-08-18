@@ -2,7 +2,8 @@ import crashlytics from '@react-native-firebase/crashlytics';
 import {NavigationContainer} from '@react-navigation/native';
 import {RootStackNav} from 'navigation';
 import React from 'react';
-import {Platform, NativeModules} from 'react-native';
+import {NativeModules} from 'react-native';
+import {QueryClient, QueryClientProvider, setLogger} from 'react-query';
 
 // import {ErrorBoundary} from './components/ErrorBoundary';
 const {ExceptionHandlerModule} = NativeModules;
@@ -26,6 +27,29 @@ const {ExceptionHandlerModule} = NativeModules;
 
 // Firebase Crashlyticsの初期化
 crashlytics().setUserId('testUser');
+// React Queryの初期化
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {retry: false},
+    mutations: {retry: false},
+  },
+});
+
+// ステータスコードが400以上の場合や、ネットワークエラーの場合は全てerrorになる。
+// ステータスコードによってFirebase Crashlyticsに送るか分岐するならば、共通エラー処理側でやればいいのでsetLoggerは使用しない
+// if (!__DEV__) {
+//   setLogger({
+//     log: (message) => {
+//       console.log(message);
+//     },
+//     warn: (message) => {
+//       console.warn(message);
+//     },
+//     error: (error) => {
+//       crashlytics().recordError(error, 'HttpApiError');
+//     },
+//   });
+// }
 
 // TODO 初期処理でユーザIDを設定
 
@@ -33,9 +57,11 @@ export const App = () => {
   return (
     // ErrorBoundaryでReact Componentsで発生したエラーを捕捉
     // <ErrorBoundary>
-    <NavigationContainer>
-      <RootStackNav />
-    </NavigationContainer>
+    <QueryClientProvider client={queryClient}>
+      <NavigationContainer>
+        <RootStackNav />
+      </NavigationContainer>
+    </QueryClientProvider>
     // </ErrorBoundary>
   );
 };
