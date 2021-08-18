@@ -32,14 +32,15 @@ export const DeepLinkContextProvider: React.FC<Props> = ({children, initialLink}
       setEvent(event);
     } else {
       setEvent(`unsafe link (${link.matchType ? link.matchType : 'no match type'}) in ${event}`);
+      setLink(link);
     }
   };
 
   const setShortLink = (shortLink: string) => {
-    setURL(shortLink, 'on App');
+    setUnresolvedURL(shortLink, 'on App');
   };
 
-  const setURL = useCallback(
+  const setUnresolvedURL = useCallback(
     (url: string, event: string) => {
       dynamicLinks()
         .resolveLink(url)
@@ -52,14 +53,16 @@ export const DeepLinkContextProvider: React.FC<Props> = ({children, initialLink}
   );
 
   useEffect(() => {
+    // https://github.com/invertase/react-native-firebase/issues/2660
+    // dynamicLinks().getInitialLink()は起動が早いと動かないため、Linkingを利用する。
     Linking.getInitialURL()
       .then((url) => {
         if (url) {
-          setURL(url, 'initial Link');
+          setUnresolvedURL(url, 'initial Link');
         }
       })
       .catch(errorHandling);
-  }, [setURL, errorHandling]);
+  }, [setUnresolvedURL, errorHandling]);
 
   useEffect(() => {
     const unsubscribe = dynamicLinks().onLink((url) => {
