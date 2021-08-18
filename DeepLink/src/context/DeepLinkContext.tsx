@@ -1,6 +1,6 @@
 import dynamicLinks, {FirebaseDynamicLinksTypes} from '@react-native-firebase/dynamic-links';
 import React, {useCallback, useContext, useEffect, useState} from 'react';
-import {Platform} from 'react-native';
+import {Linking, Platform} from 'react-native';
 
 interface ContextValueType {
   link?: FirebaseDynamicLinksTypes.DynamicLink;
@@ -13,13 +13,17 @@ export const DeepLinkContext = React.createContext<ContextValueType>({} as Conte
 
 export const useDeepLinkContext = () => useContext(DeepLinkContext);
 
-export const DeepLinkContextProvider: React.FC = ({children}) => {
+type Props = {
+  initialLink?: string;
+};
+
+export const DeepLinkContextProvider: React.FC<Props> = ({children, initialLink}) => {
   const [link, setLink] = useState<FirebaseDynamicLinksTypes.DynamicLink>();
   const [event, setEvent] = useState<string>();
 
   const errorHandling = useCallback((e: any) => console.log(e), []);
 
-  const setSafeLink = (link: FirebaseDynamicLinksTypes.DynamicLink | null, event: string) => {
+  const setSafeLink = (event: string, link?: FirebaseDynamicLinksTypes.DynamicLink) => {
     if (!link) {
       return;
     }
@@ -32,28 +36,39 @@ export const DeepLinkContextProvider: React.FC = ({children}) => {
   };
 
   const setShortLink = (shortLink: string) => {
-    dynamicLinks()
-      .resolveLink(shortLink)
-      .then((link) => {
-        setSafeLink(link, 'on App');
-      })
-      .catch(errorHandling);
+    setURL(shortLink, 'on App');
   };
 
+  const setURL = useCallback(
+    (url: string, event: string) => {
+      dynamicLinks()
+        .resolveLink(url)
+        .then((link) => {
+          setSafeLink(event, link);
+        })
+        .catch(errorHandling);
+    },
+    [errorHandling],
+  );
+
   useEffect(() => {
-    dynamicLinks()
-      .getInitialLink()
-      .then((link) => {
-        setSafeLink(link, 'initialLink');
+    Linking.getInitialURL()
+      .then((url) => {
+        if (url) {
+          setURL(url, 'initial Link');
+        }
       })
       .catch(errorHandling);
+  }, [setURL, errorHandling]);
+
+  useEffect(() => {
     const unsubscribe = dynamicLinks().onLink((url) => {
       if (url) {
-        setSafeLink(url, 'dynamic on link');
+        setSafeLink('dynamic on link', url);
       }
     });
     return unsubscribe;
-  }, [errorHandling]);
+  }, []);
 
   const contextValue: ContextValueType = {
     link,
@@ -62,19 +77,22 @@ export const DeepLinkContextProvider: React.FC = ({children}) => {
     createLink: async (key, value) => {
       const encodedKey = encodeURI(key);
       const encodedValue = encodeURI(value);
-      return dynamicLinks().buildShortLink({
-        link: `https://sample.domain/app?${encodedKey}=${encodedValue}`,
-        domainUriPrefix: `https://ws4020reactnativesandbox.page.link`,
-        ios: {
-          bundleId: 'ws4020.reactnative.sandbox',
-          fallbackUrl: 'https://apps.apple.com/jp/app/testflight/id899247664', // testflight or app store
+      return dynamicLinks().buildShortLink(
+        {
+          link: `https://sample.domain/app?${encodedKey}=${encodedValue}`,
+          domainUriPrefix: `https://ws4020reactnativesandbox.page.link`,
+          ios: {
+            bundleId: 'ws4020.reactnative.sandbox',
+            fallbackUrl: 'https://apps.apple.com/jp/app/testflight/id899247664', // testflight or app store
+          },
+          android: {
+            packageName: 'ws4020.reactnative.sandbox',
+            // Deploy Gate App
+            fallbackUrl: 'https://play.google.com/store/apps/details?id=com.deploygate&hl=ja&gl=US',
+          },
         },
-        android: {
-          packageName: 'ws4020.reactnative.sandbox',
-          // Deploy Gate App
-          fallbackUrl: 'https://play.google.com/store/apps/details?id=com.deploygate&hl=ja&gl=US',
-        },
-      });
+        FirebaseDynamicLinksTypes.ShortLinkType.DEFAULT,
+      );
     },
   };
 
