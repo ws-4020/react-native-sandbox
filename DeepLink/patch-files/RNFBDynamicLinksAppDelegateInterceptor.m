@@ -79,9 +79,6 @@
 }
 
 + (NSNumber *)numberWithMatchType:(FIRDLMatchType)matchType {
-  if (!matchType) {
-    return @0;
-  }
   switch (matchType) {
     case FIRDLMatchTypeNone:
       return @0;
