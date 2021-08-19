@@ -1,5 +1,6 @@
 {
   "main": "index.js",
+  "name": "ws4020-react-native-sandbox-deeplink",
   "scripts": {
     "android": "react-native run-android -- --dns-server 8.8.8.8",
     "ios": "react-native run-ios",
