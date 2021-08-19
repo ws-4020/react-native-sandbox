@@ -76,22 +76,19 @@ export const DeepLinkContextProvider: React.FC = ({children}) => {
     createLink: async (key, value) => {
       const encodedKey = encodeURI(key);
       const encodedValue = encodeURI(value);
-      return dynamicLinks().buildShortLink(
-        {
-          link: `https://sample.domain/app?${encodedKey}=${encodedValue}`,
-          domainUriPrefix: `https://ws4020reactnativesandbox.page.link`,
-          ios: {
-            bundleId: 'ws4020.reactnative.sandbox',
-            fallbackUrl: 'https://apps.apple.com/jp/app/testflight/id899247664', // testflight or app store
-          },
-          android: {
-            packageName: 'ws4020.reactnative.sandbox',
-            // Deploy Gate App
-            fallbackUrl: 'https://play.google.com/store/apps/details?id=com.deploygate&hl=ja&gl=US',
-          },
+      return dynamicLinks().buildShortLink({
+        link: `https://sample.domain/app?${encodedKey}=${encodedValue}`,
+        domainUriPrefix: `https://ws4020reactnativesandbox.page.link`,
+        ios: {
+          bundleId: 'ws4020.reactnative.sandbox',
+          fallbackUrl: 'https://apps.apple.com/jp/app/testflight/id899247664', // testflight or app store
         },
-        FirebaseDynamicLinksTypes.ShortLinkType.DEFAULT,
-      );
+        android: {
+          packageName: 'ws4020.reactnative.sandbox',
+          // Deploy Gate App
+          fallbackUrl: 'https://play.google.com/store/apps/details?id=com.deploygate&hl=ja&gl=US',
+        },
+      });
     },
   };
 
