@@ -23,7 +23,7 @@ Android向けとiOS向けにGoogleServiceの設定ファイルを配置します
 
 1か2を実施せずに起動してしまった場合はアプリをUninstallしてください。（署名不一致でInstallできないため）
 
-# ディープリンク
+# ディープリンクの検証
 
 Dynamic Linksを利用して「アプリケーションを開くURLの作成」と「URLからアプリを起動できる設定」を検証する。
 
@@ -61,6 +61,16 @@ GoogleService-Info.plistをDownloadして設定する。
  - `active_debug.keystore`をDownloadして`android/app`配下に配置する。
     - `build.gradle`で参照しているkeystoreを`active_debug.keystore`に変更する。
     - リポジトリにある`debug.keystore`では署名が異なるため、ドメインの関連付けはできない。
+
+## Linkの取得
+
+ユーザがタップしたときの「アプリの状態」と「取得するリスナー」は次の通り。
+
+|アプリの状態|取得するリスナー|備考|
+|:---------|:------------|:---|
+|Cold Start| Linking.getInitialURL| firebase.getInitialLinkには[issue](https://github.com/invertase/react-native-firebase/issues/2660)があるためこちらを利用する|
+|バックグラウンド|firebase.onLink|[オペレーティングシステムを統合する](https://firebase.google.com/docs/dynamic-links/operating-system-integrations)のためにfirebaseのライブラリを利用する。（Linkingは利用しない）|
+|フォアグラウンド|Context.setURL|Linking.openではブラウザが開くためUXの点から不採用。Linking.emitはfirebaseの内部実装（キー）に依存するため不採用。|
 
 ## ユースケース
 
@@ -114,19 +124,6 @@ No10ではShortLinkをクリップボードから取得する（iOS14以降の�
  - 該当の動作は許容して、URL発行時や招待コードでの有効期限エラーで工夫をする。
 
 リトライしてもらうことはユーザに大きな負担をかけないため、許容する。
-
-有効なURLを取得するまでにクリップボードの検索順がありそう。
-
-1. 有効なURLをユーザが長押しでコピーする。
-2. 有効なURLを`ws4020reactnative.page.link`からCopyさせる。
-3. インストール。
-4. アプリ起動で2が表示される。
-5. 1のURLを再度長押しでコピーする。
-6. アプリを再インストール。
-7. 1のURLが表示される。
-8. 関係のないテキストをクリップボードに保存する。
-9. アプリを再インストール。
-10. 2のURLが表示される。
 
 ### ライセンスによる制限
 
