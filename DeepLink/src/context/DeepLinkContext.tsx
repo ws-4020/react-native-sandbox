@@ -13,11 +13,7 @@ export const DeepLinkContext = React.createContext<ContextValueType>({} as Conte
 
 export const useDeepLinkContext = () => useContext(DeepLinkContext);
 
-type Props = {
-  initialLink?: string;
-};
-
-export const DeepLinkContextProvider: React.FC<Props> = ({children, initialLink}) => {
+export const DeepLinkContextProvider: React.FC = ({children}) => {
   const [link, setLink] = useState<FirebaseDynamicLinksTypes.DynamicLink>();
   const [event, setEvent] = useState<string>();
 
