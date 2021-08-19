@@ -84,18 +84,28 @@ GoogleService-Info.plistをDownloadして設定する。
 
 詳しくは[オペレーティングシステムを統合する](https://firebase.google.com/docs/dynamic-links/operating-system-integrations)のiOSフローチャートを参照。
 
-|No|アプリ起動|起動回数|クリップボード|iOS利用されるデータ|
-|:-|:-------|:-------|:-----|:----|
-|1|リンクをタップ|0|有|クリップボード|
-|2|リンクをタップ|0|なし|リンク|
-|3|リンクをタップ|1以上|有|リンク|
-|4|リンクをタップ|1以上|なし|リンク|
-|5|アイコンタップ|0|有|クリップボード|
-|6|アイコンタップ|0|なし|ー|
-|7|アイコンタップ|1以上|有|ー|
-|8|アイコンタップ|1以上|なし|ー|
+下記表は未インストール状態でURLを開き、`preview.page.link`のWebページで`OPEN`ボタンを押した状態で検証しています。
+未インストール状態で開いたURLを"`page.link`URL"と表記しています。
 
-No1のときに一度も起動していないがリンクをタップしてアプリを起動したときにタップしたリンクではなくクリップボードの値が利用される。
+|No|アプリ起動|起動回数|クリップボード|iOS利用されるデータ|matchType|
+|:-|:-------|:-------|:-----|:----|:----|
+|1|リンクをタップ|0|展開URL|リンク|unique|initialLink|
+|2|リンクをタップ|0|ShortURL|リンク|unique|initialLink|
+|3|リンクをタップ|0|その他データ|リンク|unique|initialLink|
+|4|リンクをタップ|0|なし|リンク|unique|initialLink|
+|5|リンクをタップ|1以上|正規URL|リンク|unique|initialLink|
+|6|リンクをタップ|1以上|なし|リンク|unique|initialLink|
+|7|リンクをタップ|1以上|ShortURL|リンク|unique|initialLink|
+|8|リンクをタップ|1以上|その他データ|リンク|unique|initialLink|
+|9|アプリアイコンタップ|0|展開URL|クリップボード|unique|onLink|
+|10|アプリアイコンをタップ|0|ShortURL|`page.link`URL|onLink|
+|11|アプリアイコンをタップ|0|その他データ|`page.link`URL|onLink|
+|12|アプリアイコンをタップ|0|なし|`page.link`URL|onLink|
+|13|アプリアイコンをタップ|1以上|展開URL|-|-|
+|14|アプリアイコンをタップ|1以上|ShortURL|-|-|
+|15|アプリアイコンをタップ|1以上|その他データ|-|-|
+|16|アプリアイコンをタップ|1以上|なし|-|-|
+
 
  - [SDKの設定](https://firebase.google.com/docs/dynamic-links/ios/receive)でコピー機能をOFFにしてインストール後の起動時にはHome画面を表示して、再度リンクを踏んで貰うようにガイドする。
  - 該当の動作は許容して、URL発行時や招待コードでの有効期限エラーで工夫をする。
