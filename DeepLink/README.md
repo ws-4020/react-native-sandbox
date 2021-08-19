@@ -85,7 +85,9 @@ GoogleService-Info.plistをDownloadして設定する。
 詳しくは[オペレーティングシステムを統合する](https://firebase.google.com/docs/dynamic-links/operating-system-integrations)のiOSフローチャートを参照。
 
 下記表は未インストール状態でURLを開き、`preview.page.link`のWebページで`OPEN`ボタンを押した状態で検証しています。
-未インストール状態で開いたURLを"`page.link`URL"と表記しています。
+未インストール状態で`OPEN`ボタンを押したときのURLを"`page.link`URL"と表記しています。
+
+`page.link`URLは下記表以外のどういう条件で利用されるか（いつまで有効かなど）の調査はしていませんが、デバイスのIP（Wifi接続への変更）で無効になることは確認しています。
 
 |No|アプリ起動|起動回数|クリップボード|iOS利用されるデータ|matchType|
 |:-|:-------|:-------|:-----|:----|:----|
@@ -98,14 +100,15 @@ GoogleService-Info.plistをDownloadして設定する。
 |7|リンクをタップ|1以上|ShortURL|リンク|unique|initialLink|
 |8|リンクをタップ|1以上|その他データ|リンク|unique|initialLink|
 |9|アプリアイコンタップ|0|展開URL|クリップボード|unique|onLink|
-|10|アプリアイコンをタップ|0|ShortURL|`page.link`URL|onLink|
-|11|アプリアイコンをタップ|0|その他データ|`page.link`URL|onLink|
-|12|アプリアイコンをタップ|0|なし|`page.link`URL|onLink|
+|10|アプリアイコンをタップ|0|ShortURL|`page.link`URL|week|onLink|
+|11|アプリアイコンをタップ|0|その他データ|`page.link`URL|week|onLink|
+|12|アプリアイコンをタップ|0|なし|`page.link`URL|week|onLink|
 |13|アプリアイコンをタップ|1以上|展開URL|-|-|
 |14|アプリアイコンをタップ|1以上|ShortURL|-|-|
 |15|アプリアイコンをタップ|1以上|その他データ|-|-|
 |16|アプリアイコンをタップ|1以上|なし|-|-|
 
+No10ではShortLinkをクリップボードから取得する（iOS14以降の通知がでる）が利用せずに`page.link`を利用する。
 
  - [SDKの設定](https://firebase.google.com/docs/dynamic-links/ios/receive)でコピー機能をOFFにしてインストール後の起動時にはHome画面を表示して、再度リンクを踏んで貰うようにガイドする。
  - 該当の動作は許容して、URL発行時や招待コードでの有効期限エラーで工夫をする。
