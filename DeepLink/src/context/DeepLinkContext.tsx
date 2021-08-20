@@ -19,18 +19,21 @@ export const DeepLinkContextProvider: React.FC = ({children}) => {
 
   const errorHandling = useCallback((e: any) => console.log(e), []);
 
-  const setSafeLink = (event: string, link?: FirebaseDynamicLinksTypes.DynamicLink) => {
-    if (!link) {
-      return;
-    }
-    if (Platform.OS !== 'ios' || link?.matchType === 3) {
-      setLink(link);
-      setEvent(event);
-    } else {
-      setEvent(`unsafe link (${link.matchType ? link.matchType : 'no match type'}) in ${event}`);
-      setLink(link);
-    }
-  };
+  const setSafeLink = useCallback(
+    (event: string, link?: FirebaseDynamicLinksTypes.DynamicLink) => {
+      if (!link) {
+        return;
+      }
+      if (Platform.OS !== 'ios' || link?.matchType === 3) {
+        setLink(link);
+        setEvent(event);
+      } else {
+        setEvent(`unsafe link (${link.matchType ? link.matchType : 'no match type'}) in ${event}`);
+        setLink(link);
+      }
+    },
+    [setLink, setEvent],
+  );
 
   const setShortLink = (shortLink: string) => {
     setUnresolvedURL(shortLink, 'on App');
@@ -45,12 +48,12 @@ export const DeepLinkContextProvider: React.FC = ({children}) => {
         })
         .catch(errorHandling);
     },
-    [errorHandling],
+    [errorHandling, setSafeLink],
   );
 
-  useEffect(() => {
-    // https://github.com/invertase/react-native-firebase/issues/2660
-    // dynamicLinks().getInitialLink()は起動が早いと動かないため、Linkingを利用する。
+  // https://github.com/invertase/react-native-firebase/issues/2660
+  // dynamicLinks().getInitialLink()は起動が早いと動かないため、Linkingを利用する。
+  const getInitialIOSLink = useCallback(() => {
     Linking.getInitialURL()
       .then((url) => {
         if (url) {
@@ -60,6 +63,25 @@ export const DeepLinkContextProvider: React.FC = ({children}) => {
       .catch(errorHandling);
   }, [setUnresolvedURL, errorHandling]);
 
+  const getInitailLink = useCallback(() => {
+    dynamicLinks()
+      .getInitialLink()
+      .then((link) => {
+        if (link) {
+          setSafeLink('initial Link', link);
+        }
+      })
+      .catch(errorHandling);
+  }, [setSafeLink, errorHandling]);
+
+  useEffect(() => {
+    if (Platform.OS === 'ios') {
+      getInitialIOSLink();
+    } else {
+      getInitailLink();
+    }
+  }, [getInitialIOSLink, getInitailLink]);
+
   useEffect(() => {
     const unsubscribe = dynamicLinks().onLink((url) => {
       if (url) {
@@ -67,7 +89,7 @@ export const DeepLinkContextProvider: React.FC = ({children}) => {
       }
     });
     return unsubscribe;
-  }, []);
+  }, [setSafeLink]);
 
   const contextValue: ContextValueType = {
     link,
