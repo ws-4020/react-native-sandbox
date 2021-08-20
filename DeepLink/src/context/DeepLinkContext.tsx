@@ -1,11 +1,12 @@
 import dynamicLinks, {FirebaseDynamicLinksTypes} from '@react-native-firebase/dynamic-links';
-import React, {useContext, useEffect, useState} from 'react';
-import {Linking} from 'react-native';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
+import {Linking, Platform} from 'react-native';
 
 interface ContextValueType {
   link?: FirebaseDynamicLinksTypes.DynamicLink;
   event?: string;
   createLink: (key: string, value: string) => Promise<string>;
+  setShortLink: (url: string) => void;
 }
 
 export const DeepLinkContext = React.createContext<ContextValueType>({} as ContextValueType);
@@ -16,36 +17,62 @@ export const DeepLinkContextProvider: React.FC = ({children}) => {
   const [link, setLink] = useState<FirebaseDynamicLinksTypes.DynamicLink>();
   const [event, setEvent] = useState<string>();
 
-  const errorHandling = (e: any) => console.log(e);
+  const errorHandling = useCallback((e: any) => console.log(e), []);
+
+  const setSafeLink = (event: string, link?: FirebaseDynamicLinksTypes.DynamicLink) => {
+    if (!link) {
+      return;
+    }
+    if (Platform.OS !== 'ios' || link?.matchType === 3) {
+      setLink(link);
+      setEvent(event);
+    } else {
+      setEvent(`unsafe link (${link.matchType ? link.matchType : 'no match type'}) in ${event}`);
+      setLink(link);
+    }
+  };
+
+  const setShortLink = (shortLink: string) => {
+    setUnresolvedURL(shortLink, 'on App');
+  };
+
+  const setUnresolvedURL = useCallback(
+    (url: string, event: string) => {
+      dynamicLinks()
+        .resolveLink(url)
+        .then((link) => {
+          setSafeLink(event, link);
+        })
+        .catch(errorHandling);
+    },
+    [errorHandling],
+  );
 
   useEffect(() => {
-    dynamicLinks()
-      .getInitialLink()
-      .then((link) => {
-        if (link) {
-          setLink(link);
-          setEvent('initial link');
+    // https://github.com/invertase/react-native-firebase/issues/2660
+    // dynamicLinks().getInitialLink()は起動が早いと動かないため、Linkingを利用する。
+    Linking.getInitialURL()
+      .then((url) => {
+        if (url) {
+          setUnresolvedURL(url, 'initial Link');
         }
       })
       .catch(errorHandling);
-    // forground
-    Linking.addEventListener('url', (url) => {
+  }, [setUnresolvedURL, errorHandling]);
+
+  useEffect(() => {
+    const unsubscribe = dynamicLinks().onLink((url) => {
       if (url) {
-        dynamicLinks()
-          .resolveLink(url.url)
-          .then((link) => {
-            setLink(link);
-            setEvent('on Link');
-          })
-          .catch((e) => console.log(e));
+        setSafeLink('dynamic on link', url);
       }
     });
-    return () => Linking.removeAllListeners('url');
+    return unsubscribe;
   }, []);
 
   const contextValue: ContextValueType = {
     link,
     event,
+    setShortLink,
     createLink: async (key, value) => {
       const encodedKey = encodeURI(key);
       const encodedValue = encodeURI(value);

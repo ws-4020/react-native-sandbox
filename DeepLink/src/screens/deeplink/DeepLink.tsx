@@ -1,13 +1,13 @@
 import {useDeepLinkContext} from 'context';
 import Clipboard from 'expo-clipboard';
 import React, {useCallback, useState} from 'react';
-import {KeyboardAvoidingView, Linking, Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {KeyboardAvoidingView, Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Button, Input} from 'react-native-elements';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 export const DeepLink: React.FC = () => {
-  const {link, event, createLink} = useDeepLinkContext();
+  const {link, event, createLink, setShortLink} = useDeepLinkContext();
   const [teamName, setTeamName] = useState<string>();
   const [createdLink, setCreatedLink] = useState<string>();
   const [copiedMessage, setCopiedMessage] = useState<string>();
@@ -39,9 +39,9 @@ export const DeepLink: React.FC = () => {
 
   const openCreatedUrl = useCallback(() => {
     if (createdLink) {
-      Linking.emit('url', {url: createdLink});
+      setShortLink(createdLink);
     }
-  }, [createdLink]);
+  }, [createdLink, setShortLink]);
 
   const url = link ? decodeURI(link.url) : undefined;
 
