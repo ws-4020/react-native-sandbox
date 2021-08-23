@@ -99,26 +99,31 @@ GoogleService-Info.plistをDownloadして設定する。
 
 `page.link`URLは下記表以外のどういう条件で利用されるか（いつまで有効かなど）の調査はしていませんが、デバイスのIP変更（Wifi接続への変更）で無効になることは確認しています。
 
-|No|アプリ起動|起動回数|クリップボード|iOS利用されるデータ|matchType|
-|:-|:-------|:-------|:-----|:----|:----|
-|1|リンクをタップ|0|展開URL|リンク|unique|initialLink|
-|2|リンクをタップ|0|ShortURL|リンク|unique|initialLink|
-|3|リンクをタップ|0|その他データ|リンク|unique|initialLink|
-|4|リンクをタップ|0|なし|リンク|unique|initialLink|
-|5|リンクをタップ|1以上|正規URL|リンク|unique|initialLink|
-|6|リンクをタップ|1以上|なし|リンク|unique|initialLink|
-|7|リンクをタップ|1以上|ShortURL|リンク|unique|initialLink|
-|8|リンクをタップ|1以上|その他データ|リンク|unique|initialLink|
-|9|アプリアイコンタップ|0|展開URL|クリップボード|unique|onLink|
-|10|アプリアイコンをタップ|0|ShortURL|`page.link`URL|week|onLink|
-|11|アプリアイコンをタップ|0|その他データ|`page.link`URL|week|onLink|
-|12|アプリアイコンをタップ|0|なし|`page.link`URL|week|onLink|
-|13|アプリアイコンをタップ|1以上|展開URL|-|-|
-|14|アプリアイコンをタップ|1以上|ShortURL|-|-|
-|15|アプリアイコンをタップ|1以上|その他データ|-|-|
-|16|アプリアイコンをタップ|1以上|なし|-|-|
+下記表はアプリが起動していないときの起動パターンとアプリが受け取るディープリンクの一覧です。
 
-No10ではShortLinkをクリップボードから取得する（iOS14以降の通知がでる）が利用せずに`page.link`を利用する。
+- 「リンクをタップ」はアプリがインストールされている状態でCold Startした場合です。
+- 「アプリアイコンをタップ」はディープリンクによるアプリ起動ではなく、アプリアイコンをタップ（もしくはTestFlightでインストール後に「起動」）した場合です。
+
+|No|アプリ起動|起動回数|クリップボード|iOS利用されるデータ|matchType|event|
+|:-|:-------|:-------|:-----|:----|:----|:----|
+|1|リンクをタップ|0|展開URL|起動時のリンク|unique|initialLink|
+|2|リンクをタップ|0|ShortURL|起動時のリンク|unique|initialLink|
+|3|リンクをタップ|0|その他データ|起動時のリンク|unique|initialLink|
+|4|リンクをタップ|0|なし|起動時のリンク|unique|initialLink|
+|5|リンクをタップ|1以上|正規URL|起動時のリンク|unique|initialLink|
+|6|リンクをタップ|1以上|なし|起動時のリンク|unique|initialLink|
+|7|リンクをタップ|1以上|ShortURL|起動時のリンク|unique|initialLink|
+|8|リンクをタップ|1以上|その他データ|起動時のリンク|unique|initialLink|
+|9|アプリアイコンをタップ|0|展開URL|クリップボード|unique|onLink|
+|10|アプリアイコンをタップ|0|ShortURL|`page.link`URL|not unique|onLink|
+|11|アプリアイコンをタップ|0|その他データ|`page.link`URL|not unique|onLink|
+|12|アプリアイコンをタップ|0|なし|`page.link`URL|not unique|onLink|
+|13|アプリアイコンをタップ|1以上|展開URL|-|-|-|
+|14|アプリアイコンをタップ|1以上|ShortURL|-|-|-|
+|15|アプリアイコンをタップ|1以上|その他データ|-|-|-|
+|16|アプリアイコンをタップ|1以上|なし|-|-|-|
+
+No10ではShortLinkをクリップボードから取得する（iOS14以降の通知がでる）が利用せずに`page.link`を利用します。
 
  - [SDKの設定](https://firebase.google.com/docs/dynamic-links/ios/receive)でコピー機能をOFFにしてインストール後の起動時にはHome画面を表示して、再度リンクを踏んで貰うようにガイドする。
  - 該当の動作は許容して、URL発行時や招待コードでの有効期限エラーで工夫をする。
