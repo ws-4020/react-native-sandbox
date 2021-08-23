@@ -103,6 +103,11 @@ GoogleService-Info.plistをDownloadして設定する。
 
 - 「リンクをタップ」はアプリがインストールされている状態でCold Startした場合です。
 - 「アプリアイコンをタップ」はディープリンクによるアプリ起動ではなく、アプリアイコンをタップ（もしくはTestFlightでインストール後に「起動」）した場合です。
+- クリップボード
+   - 展開URL(`https://ws4020reactnativesandbox.page.link/?link=https://sample.domain/app?...`形式)
+   - ShortURL(`https://ws4020reactnativesandbox.page.link/NNNN`形式でSDKなどで展開する必要がある)
+   - その他データ(URL形式ではないもの)
+   - なし（クリップボードにデータなし）
 
 |No|アプリ起動|起動回数|クリップボード|iOS利用されるデータ|matchType|event|
 |:-|:-------|:-------|:-----|:----|:----|:----|
