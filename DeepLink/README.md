@@ -1,35 +1,15 @@
 # ディープリンク
 
-## 環境構築
+Dynamic Linksを利用して「ディープリンクのURLの作成」と「URLからアプリを起動する方法」を検証する。
 
-まずは標準の[環境セットアップ](https://github.com/ws-4020/rn-spoiler/blob/master/README.md)を参照してください。
+ - 招待コードを含むディープリンクの作成：ディープリンクのURLの作成
+ - QRコードを読み取ってアプリを起動：URLからアプリを起動する方法
 
-Android向けとiOS向けにGoogleServiceの設定ファイルを配置します。
-
-本来ならFirebaseでの設定手順のReferenceへのリンク。
-  - Nativeのディープリンク（Android App LinksやUniversal Links)を利用する最低限の記載。
-  - Dynamic Links時の設定（これらはPageLinkを利用するから必要なのか）
-    - Applicationの登録
-    - Android -> package name, keystoreのFinger Print
-    - iOS     -> bundleId, App Store ID + TeamID
-
-### Android
-
-動作確認をする場合、ディープリンクを利用できる`debug.keystore`ではないので、Firebaseのアプリに登録しているフィンガープリントが一致するkeystoreを利用してください。
-
-1. keystoreをダウンロード
-1. `android/app/active_debug.keystore`で配置（あやまってコミットしないため）
-1. `active_debug.keystore`を利用するように`android/app/build.gradle`を修正
-
-1か2を実施せずに起動してしまった場合はアプリをUninstallしてください。（署名不一致でInstallできないため）
-
-# ディープリンクの検証
-
-Dynamic Linksを利用して「アプリケーションを開くURLの作成」と「URLからアプリを起動できる設定」を検証する。
+またアプリケーションがディープリンクを利用するための環境構築で必要なことをまとめる。
 
 ## 環境構築
 
-ディープリンクを利用するための設定は「ドメインとアプリの関連付け」「iOSアプリ」「Androidアプリ」で構成される。
+ディープリンクを利用するためには「ドメインとアプリの関連付け」「iOSアプリ」「Androidアプリ」を設定する。
 
 ### ドメインとアプリの紐付け
 
@@ -64,35 +44,24 @@ GoogleService-Info.plistをDownloadして設定する。
 
 ## Linkの取得
 
-ユーザがタップしたときの「アプリの状態」と「取得するリスナー」は次の通り。
+ユーザがURLをタップしたときにURLを取得するには「アプリの状態」毎に次の通りに実装することで実現できる。
 
 |アプリの状態|取得するリスナー|備考|
 |:---------|:------------|:---|
-|Cold Start| Linking.getInitialURL| firebase.getInitialLinkには[issue](https://github.com/invertase/react-native-firebase/issues/2660)があるためこちらを利用する|
+|Cold Start| getInitialLink| firebase.getInitialLinkには[issue](https://github.com/invertase/react-native-firebase/issues/2660)があるためLinking.getInitialURLをresolveする|
 |バックグラウンド|firebase.onLink|[オペレーティングシステムを統合する](https://firebase.google.com/docs/dynamic-links/operating-system-integrations)のためにfirebaseのライブラリを利用する。（Linkingは利用しない）|
 |フォアグラウンド|Context.setURL|Linking.openではブラウザが開くためUXの点から不採用。Linking.emitはfirebaseの内部実装（キー）に依存するため不採用。|
 
 ## ユースケース
 
-- Firebase Console上で作成したURLでアプリケーションが起動する。
-- アプリが作成したURLを共有してアプリが起動する。
-- 未インストール時はAndroidはDeploy GateにてAPKファイル、iOSはTestFlightに遷移してインストール後に起動してもらう。
+- アプリが作成したURLを共有して、起動したアプリに情報を渡す。
+- アプリを未インストールの状態でURLをタップする。
+  - 未インストール時はAndroidはDeploy GateにてAPKファイル、iOSはTestFlightに遷移してインストール後に起動してもらう。
 
 いずれの場合もURLからアプリケーションに遷移した場合に、Linkの情報を取得してアプリで確認できる。
-
-### インストール後に別のURLを利用
-
-招待コードを受け取るときに以下のケースを考えてみる。
-
-1. 1回目の招待コードを利用したURLを未インストールのユーザに送る。
-1. 受け取ったユーザは5日間の長期休暇をとっていたため、有効期限が切れたDynamic Linkでアプリをインストールする。
-1. 招待したユーザは有効期限が切れていることを検知していたため、招待コードを再発行してURLをユーザに送る。
-1. 長期休暇開けのメンバーは3で発行されたURLをタップする。
-
-このとき、ユーザは最新のURLをアプリで受け取る必要があるが、古い（1回目）URLを受けとってしまう。
-これは未インストール時にFirebaseが生成しているWebページでクリップボードにURLを設定し、インストール後はクリップボードの内容が更新されないため、インストール時のURLがアプリに渡されてしまうためである。
-
 詳しくは[オペレーティングシステムを統合する](https://firebase.google.com/docs/dynamic-links/operating-system-integrations)のiOSフローチャートを参照。
+
+### iOSでのオペレーティング・システムの統合
 
 下記表は未インストール状態でURLを開き、`preview.page.link`のWebページで`OPEN`ボタンを押した状態で検証しています。
 未インストール状態で`OPEN`ボタンを押したときのURLを"`page.link`URL"と表記しています。
@@ -169,9 +138,11 @@ test.store   -> sha256 -|
 upload.store -> sha256 _|
 ```
 
-## 未インストールのStep
+## 開発フェーズのオペレーティングシステムの統合
 
-### TestFlightで利用する
+未公開アプリを使ってディープリンクを利用する方法を検証する。
+
+### TestFlightを利用する
 
 アプリがインストールされていない場合のURLをTestFlightに向けておけばインストールはできる。
 
@@ -179,13 +150,7 @@ upload.store -> sha256 _|
   1. TestFlightからアプリをインストール
   1. URLを取得
 
-ただし取得されるURLがTestFlightのURLになってしまうので、Firebaseに記憶させるURLを工夫すればできるかもしれない。
-
- 1. linkを作成
- 1. アプリがインストールしていないURLをTestFlightに設定
- 1. TestFlight経由でAppがインストールされれば該当のURLがモバイルアプリで取得できる
-
-### Androidで利用する
+### DeployGateを利用する
 
 アプリがインストールされていない場合のURLをDeploy Gateにむければできる。
 
@@ -211,6 +176,7 @@ Firebase Consoleにアクセスして エンゲージメント > Dynamic Links�
 
 Dynamic Links用のWebAPIキーを使用して、つぎのようなLinkを作成する。
 アプリからURLを作成しないケースなので利用しないが、アプリ外で作成する場合に使用する。
+今回は未検証。
 
  - 長いリンクから短いリンクを作成する
  - パラメータから短いリンクを作成する
@@ -219,8 +185,26 @@ Dynamic Links用のWebAPIキーを使用して、つぎのようなLinkを作成
 ### マニュアル
 
 Firebase Consoleにアクセスできない(Web APIキーも渡せない)関係者にURLを作成してもらうパターンくらいしか思いつかない。
+今回は未検証。
 
 - iOSは`https://your_subdomain.page.link/?link=your_deep_link&ibi=bundleId&ifl=appLandingPageUrl`となる。
 - Androidは`https://your_subdomain.page.link/?link=your_deep_link&apn=package_name`となる。
 
 詳細なパラメータは[手動で作成する](https://firebase.google.com/docs/dynamic-links/create-manually)を参照。
+
+## 検証アプリの環境構築
+
+まずは標準の[環境セットアップ](https://github.com/ws-4020/rn-spoiler/blob/master/README.md)を参照してください。
+
+Android向けとiOS向けにGoogleServiceの設定ファイルを配置します。
+
+### Androidのkeystore
+
+動作確認をする場合、ディープリンクを利用できる`debug.keystore`ではないので、Firebaseのアプリに登録しているフィンガープリントが一致するkeystoreを利用してください。
+
+1. keystoreをダウンロード
+1. `android/app/active_debug.keystore`で配置（あやまってコミットしないため）
+1. `active_debug.keystore`を利用するように`android/app/build.gradle`を修正
+
+1か2を実施せずに起動してしまった場合はアプリをUninstallしてください。（署名不一致でInstallできないため）
+
