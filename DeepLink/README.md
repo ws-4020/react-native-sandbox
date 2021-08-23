@@ -103,9 +103,15 @@ No10ではShortLinkをクリップボードから取得する（iOS14以降の�
 
 ### ライセンスによる制限
 
+<<<<<<< HEAD
 「ドメインの関連付け」を利用しないでもアプリケーションの起動はGoogleService-Info.plistのbundleIdと比較していないので個人開発者アカウントでURLの作成できます。
 
 開発用のGoogleService-Info.plistとgoogle-service.jsonを作成しSDKを設定してから開発者に配布できます。
+=======
+「ドメインの関連付け」を利用しないでもアプリケーションの起動はGoogleService-Info.plistのbundleIdと比較していないので個人開発者アカウントでURLの作成が可能です。
+
+開発用のGoogleService-Info.plistとgoogle-service.jsonを作成しSDKを設定してから開発者に配布してください。
+>>>>>>> c6642975afcefbfdfdfcc49b63677dae7c990822
 
 ### 未検証ポイント
 
