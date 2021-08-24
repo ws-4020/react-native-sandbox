@@ -13,8 +13,6 @@ Dynamic Linksを利用して「ディープリンクのURLの作成」と「URL�
 
 ### ドメインとアプリの紐付け
 
-Dynamic Linksを利用する場合Firebase Console上で作業します。
-
 Firebase ConsoleのDynamic LinksのページでFirebaseの`page.link`のサブドメイン(`ws4020reactnativesandbox.page.link`)を利用してURLを作成し、アプリと紐付けます。
 
 Firebase Console上でDynamic Linksを作成したら次のようなURLに関連情報が作成されていることを確認します。
