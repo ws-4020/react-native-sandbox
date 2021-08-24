@@ -51,9 +51,9 @@ GoogleService-Info.plistをDownloadして設定します。
 |:---------|:------------|:---|
 |Cold Start| firebase.getInitialLink| firebase.getInitialLinkには[issue](https://github.com/invertase/react-native-firebase/issues/2660)があるためLinking.getInitialURLをresolveします|
 |バックグラウンド|firebase.onLink|[オペレーティングシステムを統合する](https://firebase.google.com/docs/dynamic-links/operating-system-integrations)のためにfirebaseのライブラリを利用します|
-|フォアグラウンド|firebase.resolve[^1]|Linking.openではブラウザが開くためUXの点から採用しません。Linking.emitはfirebaseの内部実装（キー）に依存するため採用しません。|
+|フォアグラウンド|firebase.resolve|Linking.openではブラウザが開くためUXの点から採用しません。Linking.emitはfirebaseの内部実装（キー）に依存するため採用しません。|
 
-[^1]: ディープリンクの機能を利用せず、アプリ内で処理します。そのときDynamic Linksの中に含まれるlinkを取得するためにresolveを利用します。
+フォアグラウンドではディープリンクの機能を利用せず、アプリ内で処理します。そのときDynamic Linksの中に含まれるlinkを取得するためにresolveを利用します。
 
 ## ユースケース
 
@@ -66,11 +66,6 @@ GoogleService-Info.plistをDownloadして設定します。
 
 ### iOSでのオペレーティング・システムの統合
 
-下記表は未インストール状態でURLを開き、`preview.page.link`のWebページで`OPEN`ボタンを押した状態で検証しています。
-未インストール状態で`OPEN`ボタンを押したときのURLを"`page.link`URL"と表記しています。
-
-`page.link`URLは下記表以外のどういう条件で利用されるか（いつまで有効かなど）の調査はしていませんが、デバイスのIP変更（Wifi接続への変更）で無効になることは確認しています。
-
 下記表はアプリが起動していないときの起動パターンとアプリが受け取るディープリンクの一覧です。
 
 - 「リンクをタップ」はアプリがインストールされている状態でCold Startした場合です。
@@ -80,6 +75,14 @@ GoogleService-Info.plistをDownloadして設定します。
    - ShortURL(`https://ws4020reactnativesandbox.page.link/NNNN`形式でSDKなどで展開する必要がある)
    - その他データ(URL形式ではないもの)
    - なし（クリップボードにデータなし）
+
+実施時は`preview.page.link`のWebページで`OPEN`ボタンを押した端末で検証しています。[^2]
+
+未インストール状態で`OPEN`ボタンを押したときにWebサイトに保存されるURLを"保存されたURL"と表記しています。
+（クリップボードから消えても残るURLです。）
+
+[^2]:`page.link`URLは下記表以外のどういう条件で利用されるか（いつまで有効かなど）の調査はしていませんが、デバイスのIP変更（Wifi接続への変更）で無効になることは確認しています。
+
 
 |No|アプリ起動|起動回数|クリップボード|iOS利用されるデータ|matchType|event|
 |:-|:-------|:-------|:-----|:----|:----|:----|
@@ -92,17 +95,15 @@ GoogleService-Info.plistをDownloadして設定します。
 |7|リンクをタップ|1以上|ShortURL|起動時のリンク|unique|initialLink|
 |8|リンクをタップ|1以上|その他データ|起動時のリンク|unique|initialLink|
 |9|アプリアイコンをタップ|0|展開URL|クリップボード|unique|onLink|
-|10|アプリアイコンをタップ|0|ShortURL|`page.link`URL|not unique|onLink|
-|11|アプリアイコンをタップ|0|その他データ|`page.link`URL|not unique|onLink|
-|12|アプリアイコンをタップ|0|なし|`page.link`URL|not unique|onLink|
+|10|アプリアイコンをタップ|0|ShortURL|保存されたURL|not unique|onLink|
+|11|アプリアイコンをタップ|0|その他データ|保存されたURL|not unique|onLink|
+|12|アプリアイコンをタップ|0|なし|保存されたURL|not unique|onLink|
 |13|アプリアイコンをタップ|1以上|展開URL|-|-|-|
 |14|アプリアイコンをタップ|1以上|ShortURL|-|-|-|
 |15|アプリアイコンをタップ|1以上|その他データ|-|-|-|
 |16|アプリアイコンをタップ|1以上|なし|-|-|-|
 
 No10ではShortURLをクリップボードから取得する（iOS14以降の通知がでる）が利用されずに`page.link`を利用します。
-
-リトライしてもらうことはユーザに大きな負担をかけないため、許容します。
 
 ### ライセンスによる制限
 
