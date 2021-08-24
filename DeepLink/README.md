@@ -135,6 +135,8 @@ Deploy Gateでの検証をしていますが、Google Playの内部テスト版�
 通常アプリケーションの開発時にはデバッグビルドを利用し、debug.storeが利用されます。
 これと、アップロード用鍵で作成した証明書の療法が利用できることを確認する必要があります。
 
+[複数のアプリ](https://developer.android.google.cn/training/app-links/verify-site-associations?hl=ja#multiple-apps)で対応できる想定ですが、できない場合[複数のホスト](https://developer.android.google.cn/training/app-links/verify-site-associations?hl=ja#multi-host)で対応する想定です。
+
 ```
 debug.store  -> sha256 -+-> http://application/assetlinks.json
 test.store   -> sha256 -|
