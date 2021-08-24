@@ -31,6 +31,9 @@ iOSでのドメインの関連付け（[Associated Domains](https://help.apple.c
 
 GoogleService-Info.plistをDownloadして設定します。
 
+- `GoogleService-Info.plist`をDonwloadして`ios/DeepLink`配下に配置します。
+- Xcodeを起動し、File > Add New File to DeepLinkで配置した`GoogleService-Info.plist`を選択します。
+
 ### Androidアプリ
 
 紐付けに必要なリソースを配置してビルドします。
