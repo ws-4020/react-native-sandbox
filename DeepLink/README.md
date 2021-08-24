@@ -24,7 +24,7 @@ Firebase Console上でDynamic Linksを作成したら次のようなURLに関連
 - Android: `https://${domain}/.well-known/assetlinks.json`
   (例: `https://ws4020reactnativesandbox.page.link/.well-known/assetlinks.json`)
 
-Customドメイン（たとえば`sandbox.ws-4020.mobile-app.com`など）も利用可能ですが、`page.link`でユースケースを満たせているため検証していません。
+カスタムドメイン（たとえば`sandbox.ws-4020.mobile-app.com`など）も利用可能ですが、`page.link`でユースケースを満たせているため検証していません。
 
 ### iOSアプリ
 
