@@ -47,11 +47,13 @@ GoogleService-Info.plistをDownloadして設定します。
 
 ユーザがURLをタップしたときにURLを取得するには「アプリの状態」毎に次の通りに実装することで実現できます。
 
-|アプリの状態|取得するリスナー|備考|
+|アプリの状態|利用するメソッド|備考|
 |:---------|:------------|:---|
-|Cold Start| getInitialLink| firebase.getInitialLinkには[issue](https://github.com/invertase/react-native-firebase/issues/2660)があるためLinking.getInitialURLをresolveします|
+|Cold Start| firebase.getInitialLink| firebase.getInitialLinkには[issue](https://github.com/invertase/react-native-firebase/issues/2660)があるためLinking.getInitialURLをresolveします|
 |バックグラウンド|firebase.onLink|[オペレーティングシステムを統合する](https://firebase.google.com/docs/dynamic-links/operating-system-integrations)のためにfirebaseのライブラリを利用します|
-|フォアグラウンド|Context.setURL|Linking.openではブラウザが開くためUXの点から採用しません。Linking.emitはfirebaseの内部実装（キー）に依存するため採用しません。|
+|フォアグラウンド|firebase.resolve[^1]|Linking.openではブラウザが開くためUXの点から採用しません。Linking.emitはfirebaseの内部実装（キー）に依存するため採用しません。|
+
+[^1]: ディープリンクの機能を利用せず、アプリ内で処理します。そのときDynamic Linksの中に含まれるlinkを取得するためにresolveを利用します。
 
 ## ユースケース
 
