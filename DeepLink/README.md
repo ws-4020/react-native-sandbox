@@ -34,6 +34,7 @@ GoogleService-Info.plistをDownloadして設定します。
 ### Androidアプリ
 
 紐付けに必要なリソースを配置してビルドします。
+動作確認をする場合、ディープリンクを利用できる`debug.keystore`ではないので、Firebaseのアプリに登録しているフィンガープリントが一致するkeystoreを利用してください。
 
  - `google-services.json`をDownloadして`android/app`配下に配置します。
  - `active_debug.keystore`をDownloadして`android/app`配下に配置します。
@@ -195,20 +196,4 @@ Firebase Consoleにアクセスできない(Web APIキーも渡せない)関係�
 - Androidは`https://your_subdomain.page.link/?link=your_deep_link&apn=package_name`
 
 詳細なパラメータは[手動で作成する](https://firebase.google.com/docs/dynamic-links/create-manually)を参照してください。
-
-## 検証アプリの環境構築
-
-まずは標準の[環境セットアップ](https://github.com/ws-4020/rn-spoiler/blob/master/README.md)を参照してください。
-
-Android向けとiOS向けにGoogleServiceの設定ファイルを配置します。
-
-### Androidのkeystore
-
-動作確認をする場合、ディープリンクを利用できる`debug.keystore`ではないので、Firebaseのアプリに登録しているフィンガープリントが一致するkeystoreを利用してください。
-
-1. keystoreをダウンロード
-1. `android/app/active_debug.keystore`で配置（あやまってコミットしないため）
-1. `active_debug.keystore`を利用するように`android/app/build.gradle`を修正
-
-1か2を実施せずに起動してしまった場合はアプリをUninstallしてください。（署名不一致でInstallできないため）
 
