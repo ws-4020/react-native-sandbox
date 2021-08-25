@@ -164,6 +164,7 @@ upload.store -> sha256 _|
  1. アプリがインストールされていないURLをDeploy Gate AppのURLにする
  1. インストール手順にしたがい、インストール
  1. アプリを起動
+ 1. URLを取得
 
 ## Dynamicリンクを作成する
 
