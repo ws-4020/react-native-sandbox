@@ -153,6 +153,7 @@ upload.store -> sha256 _|
 
   1. TestFlightをインストール
   1. TestFlightからアプリをインストール
+  1. アプリを起動
   1. URLを取得
 
 ### DeployGateを利用する
