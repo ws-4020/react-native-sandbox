@@ -59,7 +59,7 @@ GoogleService-Info.plistをDownloadして設定します。
   - 未インストール時はAndroidはDeploy GateにてAPKファイル、iOSはTestFlightに遷移してインストール後に起動する。
 
 いずれの場合もURLからアプリケーションに遷移した場合に、Linkの情報を取得してアプリで確認できます。
-詳しくは[オペレーティングシステムを統合する](https://firebase.google.com/docs/dynamic-links/operating-system-integrations)のiOSフローチャートを参照してください。
+詳しくは[オペレーティングシステムを統合する](https://firebase.google.com/docs/dynamic-links/operating-system-integrations)のフローチャートを参照してください。
 
 ### iOSでのオペレーティング・システムの統合
 
