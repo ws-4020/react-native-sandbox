@@ -180,7 +180,7 @@ Firebase Consoleにアクセスして エンゲージメント > Dynamic Links�
 ### REST API
 
 Dynamic Links用のWebAPIキーを使用して、つぎのようなLinkを作成します。
-アプリからURLを作成しないケースなので利用しないが、アプリ外で作成する場合に使用すると想定されます。
+言語向けのSDKが提供されていないなどの理由でFirebase Dynamic LinkのSDKを利用できない場合には、REST APIを使用してURLを作成します。
 今回は未検証です。
 
  - 長いリンクから短いリンクを作成する
