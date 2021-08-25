@@ -63,7 +63,7 @@ export const DeepLinkContextProvider: React.FC = ({children}) => {
       .catch(errorHandling);
   }, [setUnresolvedURL, errorHandling]);
 
-  const getInitailLink = useCallback(() => {
+  const getInitialLink = useCallback(() => {
     dynamicLinks()
       .getInitialLink()
       .then((link) => {
@@ -78,9 +78,9 @@ export const DeepLinkContextProvider: React.FC = ({children}) => {
     if (Platform.OS === 'ios') {
       getInitialIOSLink();
     } else {
-      getInitailLink();
+      getInitialLink();
     }
-  }, [getInitialIOSLink, getInitailLink]);
+  }, [getInitialIOSLink, getInitialLink]);
 
   useEffect(() => {
     const unsubscribe = dynamicLinks().onLink((url) => {
