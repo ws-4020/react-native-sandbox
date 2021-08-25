@@ -170,7 +170,7 @@ upload.store -> sha256 _|
 
 Dynamic Linksを作成するには4つのパターンがあります。
 
-- Firebase Console上で作成する
+### Firebase Console上で作成する
 
 Firebase Consoleにアクセスして エンゲージメント > Dynamic Linksから作成します。
 設定ファイルの作成や検証のために、まずはここから開始すると問題の切り分けができます。
