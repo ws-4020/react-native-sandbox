@@ -10,7 +10,7 @@ Dynamic Linksを利用して「ディープリンクのURLの作成」と「URL�
 
 ### ドメインとアプリの紐付け
 
-Firebase ConsoleのDynamic Linksのページで`page.link`のサブドメインを利用して[URLを作成](https://console.firebase.google.com/project/_/durablelinks/links/?hl=ja)し、アプリと紐付けます。
+[Firebase ConsoleのDynamic Links](](https://console.firebase.google.com/project/_/durablelinks/links/?hl=ja))のページで`page.link`のサブドメインを利用してURLを作成し、アプリと紐付けます。
 
 Firebase Console上でDynamic Linksを作成したら次のようなURLに関連情報が作成されていることを確認します。
 
@@ -29,7 +29,7 @@ iOSでのドメインの関連付け（[Associated Domains](https://help.apple.c
 GoogleService-Info.plistをDownloadして設定します。
 
 - `GoogleService-Info.plist`をDonwloadして`ios/DeepLink`配下に配置します。
-- 新しいドメインを紐付ける場合、Xcodeを起動し、CapabillitiesのAssociated Domainsに`applinks:...`で設定してください。
+- 新しいドメインを紐付ける場合はXcodeを起動し、CapabillitiesのAssociated Domainsに`applinks:...`を設定してください。
 
 ### Androidアプリ
 
@@ -56,18 +56,20 @@ GoogleService-Info.plistをDownloadして設定します。
 
 ## 機能の確認
 
-- アプリでURLを作成する。
-- URLの情報をアプリで取得する。
+- アプリでディープリンクのURLを作成する。
+- ディープリンクのURLからリンクの情報をアプリで取得する。
 
 DeepLink画面では次の機能を確認できます。
- - ディープリンクのURLを開いて、受け取った値とイベントの確認
+ - ブラウザなどでディープリンクのURLを開いて、受け取った値とイベントの確認
  - チーム名を指定してディープリンクURLの作成
    - 生成された短縮URLをタップするとクリップボードにコピー
    - 「生成したURLをアプリから開く」と短縮URLからチーム名を含むURLが取得できる
 
-### iOSでのオペレーティング・システムの統合
+### iOSでのオペレーティング・システムの統合の検証
 
 [オペレーティング・システムの統合](https://firebase.google.com/docs/dynamic-links/operating-system-integrations)のフローにない動作をするケースがあったため、検証しています。
+
+フロー上はアプリをインストールしていない場合、クリップボードのURLを利用することと記載されていますが、クリップボードにURLがない場合でもアプリケーションにURLが渡されていました。
 
 下記表はアプリが起動していないときの起動パターンとアプリが受け取るディープリンクの一覧です。
 
@@ -75,7 +77,7 @@ DeepLink画面では次の機能を確認できます。
 - 「アプリアイコンをタップ」はディープリンクによるアプリ起動ではなく、アプリアイコンをタップ（もしくはTestFlightでインストール後に「起動」）した場合です。
 - クリップボード
    - 展開URL(`https://ws4020reactnativesandbox.page.link/?link=https://sample.domain/app?...`形式)
-   - ShortURL(`https://ws4020reactnativesandbox.page.link/NNNN`形式でSDKなどで展開する必要がある)
+   - ShortURL(`https://ws4020reactnativesandbox.page.link/NNNN`形式でSDKで展開する必要がある)
    - その他データ(URL形式ではないもの)
    - なし（クリップボードにデータなし）
 
@@ -107,14 +109,6 @@ DeepLink画面では次の機能を確認できます。
 |16|アプリアイコンをタップ|1以上|なし|-|-|-|
 
 No10ではShortURLをクリップボードから取得しますが、利用されずに保存されたURLを利用します。（iOS14以降の通知が表示されます）
-
-### ライセンスによる制限
-
-「ドメインの関連付け」にはADPかADEPが必要なので、実際にリンクからアプリケーションを起動するテストをするには、ADPかADEPでビルドしたアプリケーションが必要です。
-
-ただし、個人開発者アカウントでビルドした場合でもアプリケーションの起動はできるので、リンクからアプリケーションを起動するユースケースを含まない部分であれば、個人開発者アカウントで開発できます。
-
-そのため、開発用のGoogleService-Info.plistとgoogle-service.jsonを作成しSDKを設定してから開発者に配布しても、開発者全員に配布用証明書を提供する必要はありません。
 
 ### 未検証ポイント
 
