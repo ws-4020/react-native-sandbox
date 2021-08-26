@@ -10,7 +10,7 @@ Dynamic Linksを利用して「ディープリンクのURLの作成」と「URL�
 
 ### ドメインとアプリの紐付け
 
-Firebase ConsoleのDynamic LinksのページでFirebaseの`page.link`のサブドメイン(`ws4020reactnativesandbox.page.link`)を利用してURLを作成し、アプリと紐付けます。
+Firebase ConsoleのDynamic Linksのページで`page.link`のサブドメインを利用して[URLを作成](https://console.firebase.google.com/project/_/durablelinks/links/?hl=ja)し、アプリと紐付けます。
 
 Firebase Console上でDynamic Linksを作成したら次のようなURLに関連情報が作成されていることを確認します。
 
@@ -29,7 +29,7 @@ iOSでのドメインの関連付け（[Associated Domains](https://help.apple.c
 GoogleService-Info.plistをDownloadして設定します。
 
 - `GoogleService-Info.plist`をDonwloadして`ios/DeepLink`配下に配置します。
-- Xcodeを起動し、File > Add New File to DeepLinkで配置した`GoogleService-Info.plist`を選択します。
+- 新しいドメインを紐付ける場合、Xcodeを起動し、CapabillitiesのAssociated Domainsに`applinks:...`で設定してください。
 
 ### Androidアプリ
 
@@ -37,13 +37,14 @@ GoogleService-Info.plistをDownloadして設定します。
 動作確認をする場合、ディープリンクを利用できる`debug.keystore`ではないので、Firebaseのアプリに登録しているフィンガープリントが一致するkeystoreを利用してください。
 
  - `google-services.json`をDownloadして`android/app`配下に配置します。
+ - 新しいドメインを紐付ける場合、`android/app/src/main/AndroidManifest.xml` に[ドメイン](https://firebase.google.com/docs/dynamic-links/android/receive?hl=ja#add-an-intent-filter-for-deep-links)を追加してください。
  - `active_debug.keystore`をDownloadして`android/app`配下に配置します。
     - `build.gradle`で参照しているkeystoreを`active_debug.keystore`に変更します。
     - リポジトリにある`debug.keystore`では署名が異なるため、ドメインの関連付けはできません。
 
 ## Linkの取得
 
-ユーザがURLをタップしたときにURLを取得するには「アプリの状態」毎に次の通りに実装することで実現できます。
+ユーザがURLをタップしたときにURLを取得するには「アプリの状態」毎に次の通りに実装しています。
 
 |アプリの状態|利用するメソッド|備考|
 |:---------|:------------|:---|
@@ -53,16 +54,20 @@ GoogleService-Info.plistをDownloadして設定します。
 
 フォアグラウンドではディープリンクの機能を利用せず、アプリ内で処理します。そのときDynamic Linksの中に含まれるlinkを取得するためにresolveを利用します。
 
-## ユースケース
+## 機能の確認
 
-- アプリが作成したURLを共有して、起動したアプリに情報を渡す。
-- アプリを未インストールの状態でURLをタップする。
-  - 未インストール時はAndroidはDeploy GateにてAPKファイル、iOSはTestFlightに遷移してインストール後に起動する。
+- アプリでURLを作成する。
+- URLの情報をアプリで取得する。
 
-いずれの場合もURLからアプリケーションに遷移した場合に、Linkの情報を取得してアプリで確認できます。
-詳しくは[オペレーティングシステムを統合する](https://firebase.google.com/docs/dynamic-links/operating-system-integrations)のフローチャートを参照してください。
+DeepLink画面では次の機能を確認できます。
+ - ディープリンクのURLを開いて、受け取った値とイベントの確認
+ - チーム名を指定してディープリンクURLの作成
+   - 生成された短縮URLをタップするとクリップボードにコピー
+   - 「生成したURLをアプリから開く」と短縮URLからチーム名を含むURLが取得できる
 
 ### iOSでのオペレーティング・システムの統合
+
+[オペレーティング・システムの統合](https://firebase.google.com/docs/dynamic-links/operating-system-integrations)のフローにない動作をするケースがあったため、検証しています。
 
 下記表はアプリが起動していないときの起動パターンとアプリが受け取るディープリンクの一覧です。
 
@@ -177,8 +182,7 @@ Firebase Consoleにアクセスして エンゲージメント > Dynamic Links�
 
 ### Firebase Dynamic Link Builder APIを利用する
 
-今回のアプリケーションで実装しています。
-
+今回のアプリケーションの[DeepLinkContext](src/context/DeepLinkContext.tsx)で実装しています。
 ### REST API
 
 Dynamic Links用のWebAPIキーを使用して、つぎのようなLinkを作成します。
