@@ -29,7 +29,7 @@ iOSでのドメインの関連付け（[Associated Domains](https://help.apple.c
 GoogleService-Info.plistをDownloadして設定します。
 
 - `GoogleService-Info.plist`をDonwloadして`ios/DeepLink`配下に配置します。
-- 新しいドメインを紐付ける場合はXcodeを起動し、CapabillitiesのAssociated Domainsに`applinks:...`を設定してください。
+- 新しいドメインを紐付ける場合は。Xcodeを起動し、[Capabillitiesを設定](https://firebase.google.com/docs/dynamic-links/ios/receive?hl=ja#open-dynamic-links-in-your-app)してください。
 
 ### Androidアプリ
 
