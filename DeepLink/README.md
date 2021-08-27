@@ -132,8 +132,10 @@ Deploy Gateでの検証をしていますが、Google Playの内部テスト版�
 
 #### Androidアプリを複数作成
 
-通常アプリケーションの開発時にはデバッグビルドを利用し、debug.storeが利用されます。
-これと、アップロード用鍵で作成した証明書の療法が利用できることを確認する必要があります。
+通常アプリケーションの開発時にはデバッグ用のkeystoreを利用し、本番用のkeystoreは利用できません。
+そのため、debug用やテスト用、本番用など複数のkeystoreが利用できることを確認する必要があります。
+
+また本番では署名として[アップロード鍵](https://support.google.com/googleplay/android-developer/answer/9842756)を利用するため、その手順の整理と検証が必要です。
 
 [複数のアプリ](https://developer.android.google.cn/training/app-links/verify-site-associations?hl=ja#multiple-apps)で対応できる想定ですが、できない場合[複数のホスト](https://developer.android.google.cn/training/app-links/verify-site-associations?hl=ja#multi-host)で対応する想定です。
 
