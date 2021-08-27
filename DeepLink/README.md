@@ -80,7 +80,7 @@ DeepLink画面では次の機能を確認できます。
    - ShortURL(`https://ws4020reactnativesandbox.page.link/NNNN`形式でSDKで展開する必要がある)
    - その他データ(URL形式ではないもの)
    - なし（クリップボードにデータなし）
-- 「matchType」はアプリがDynamic Linksを受け取ったときの情報の一部です。[matchType](https://firebase.google.com/docs/reference/swift/firebasedynamiclinks/api/reference/Enums/DLMatchType.html)が`unique`でない場合はユーザが意図しないURLをアプリが受け取っている可能性があります。
+- 「matchType(iOS)」はiOSアプリがDynamic Linksを受け取ったときの情報の一部です。[matchType](https://firebase.google.com/docs/reference/swift/firebasedynamiclinks/api/reference/Enums/DLMatchType.html)が`unique`でない場合はユーザが意図しないURLをアプリが受け取っている可能性があります。
 
 実施時は`preview.page.link`のWebページで`OPEN`ボタンを押した端末で検証しています。[^2]
 
@@ -90,7 +90,7 @@ DeepLink画面では次の機能を確認できます。
 [^2]:`page.link`URLは下記表以外のどういう条件で利用されるか（いつまで有効かなど）の調査はしていませんが、デバイスのIP変更（Wifi接続への変更）で無効になることは確認しています。
 
 
-|No|アプリ起動|起動回数|クリップボード|アプリで受け取るデータ|matchType|event|
+|No|アプリ起動|起動回数|クリップボード|アプリで受け取るデータ|matchType(iOS)|event|
 |:-|:-------|:-------|:-----|:----|:----|:----|
 |1|リンクをタップ|0|展開URL|起動時のリンク|unique|initialLink|
 |2|リンクをタップ|0|ShortURL|起動時のリンク|unique|initialLink|
