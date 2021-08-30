@@ -133,7 +133,7 @@ Deploy Gateでの検証をしていますが、Google Playの内部テスト版�
 #### Androidアプリを複数作成
 
 通常アプリケーションの開発時にはデバッグ用のkeystoreを利用し、本番用のkeystoreは利用できません。
-そのため、debug用やテスト用、本番用など複数のkeystoreが利用できることを確認する必要があります。
+そのため、一つのドメインをdebug用やテスト用、本番用などの複数のkeystoreやアプリケーションIDに関連付ける必要があるはずですが、まだその構成ではテストできていません。
 
 また本番では署名として[アップロード鍵](https://support.google.com/googleplay/android-developer/answer/9842756)を利用するため、その手順の整理と検証が必要です。
 
