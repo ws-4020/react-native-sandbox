@@ -50,9 +50,6 @@ GoogleService-Info.plistをDownloadして設定します。
 |:---------|:------------|:---|
 |Cold Start| firebase.getInitialLink(Android) or Linking.getInitialURL(iOS) | firebase.getInitialLinkにはiOSで[issue](https://github.com/invertase/react-native-firebase/issues/2660)があるためLinking.getInitialURLをresolveします|
 |バックグラウンド|firebase.onLink|[オペレーティングシステムを統合する](https://firebase.google.com/docs/dynamic-links/operating-system-integrations)のためにfirebaseのライブラリを利用します|
-|フォアグラウンド|firebase.resolve|Linking.openではブラウザが開くためUXの点から採用しません。Linking.emitはfirebaseの内部実装（キー）に依存するため採用しません。|
-
-フォアグラウンドではディープリンクの機能を利用せず、アプリ内で処理します。そのときDynamic Linksの中に含まれるlinkを取得するためにresolveを利用します。
 
 ## 機能の確認
 
