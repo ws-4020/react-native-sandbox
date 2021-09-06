@@ -34,7 +34,7 @@ GoogleService-Info.plistをDownloadして設定します。
 ### Androidアプリ
 
 紐付けに必要なリソースを配置してビルドします。
-動作確認をする場合、ディープリンクを利用できる`debug.keystore`ではないので、Firebaseのアプリに登録しているフィンガープリントが一致するkeystoreを利用してください。
+初期設定してある`debug.keystore`のフィンガープリントはFirebaseアプリには登録していないので、ディープリンクの動作確認のためには、署名に利用するkeystoreを変更しなくてはいけない点に注意してください。
 
  - `google-services.json`をDownloadして`android/app`配下に配置します。
  - 新しいドメインを紐付ける場合、`android/app/src/main/AndroidManifest.xml` に[ドメイン](https://firebase.google.com/docs/dynamic-links/android/receive?hl=ja#add-an-intent-filter-for-deep-links)を追加してください。
